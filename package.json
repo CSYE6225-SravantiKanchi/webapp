@@ -1,0 +1,25 @@
+{
+  "name": "csye_6225_assignment1",
+  "version": "1.0.0",
+  "description": "Assignment 1 which handles health check API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest",
+    "coverage": "cross-env NODE_ENV=test jest --coverage"
+  },
+  "author": "Sravanti Kanchi",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.18.2",
+    "http-status": "^1.7.3",
+    "jest": "^29.7.0",
+    "mysql2": "^3.9.0",
+    "nodemon": "^3.0.3",
+    "sequelize": "^6.35.2",
+    "supertest": "^6.3.4"
+  }
+}
