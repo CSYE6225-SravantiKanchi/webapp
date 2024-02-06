@@ -3,13 +3,29 @@
 */
 
 jest.mock('../config/sequelize', () => {
-  const sequelizeMock = {}; 
+  const Sequelize = require("sequelize-mock");
+
+  const sequelizeMock = new Sequelize(); 
   sequelizeMock.authenticate = jest.fn();
   
-  //exports module return an object of methods or functions which we pass
   return { sequelize: sequelizeMock };
 });
 
+
+jest.mock('../models/user.model', (
+
+) => () => {
+  const Sequelize = require("sequelize-mock");
+
+  const dbMock = new Sequelize();
+  return dbMock.define('user',  {
+    id: 2,
+    first_name: 'good',
+    last_name: 'day',
+    password: "random",
+    username: 'dummy'
+  })
+});
 
 const request = require("supertest");
 const app = require("../config/express");
