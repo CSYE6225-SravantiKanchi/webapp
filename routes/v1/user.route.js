@@ -1,8 +1,8 @@
 const express = require('express');
 const { celebrate: validate } = require('celebrate');
 const controller = require('../../controllers/v1/user.controller');
-
-const {  handler : authorize } = require('../../middleware/authorize');
+const httpStatus = require('http-status');
+const {  handler : authorize, authNotRequired } = require('../../middleware/authorize');
 const { noPayload } = require('../../middleware/payload.js');
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router
    *
    * @apiSuccess {Object} Users
    */
-  .post(validate(create), controller.create);
+  .post(authNotRequired, validate(create), controller.create);
 
 router
   .route('/self')
@@ -61,6 +61,7 @@ router
    *
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
    */
-  .put(validate(update), authorize, controller.update);
+  .put(validate(update), authorize, controller.update).
+  all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());;
 
 module.exports = router;

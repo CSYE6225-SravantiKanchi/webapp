@@ -42,7 +42,7 @@ exports.read = async (req, res, next) => {
     {
     return res.status(httpStatus.OK).json({ ...data });
     }
-    return res.status(httpStatus.NOT_FOUND).json().send();
+    return res.status(httpStatus.BAD_REQUEST).json().send();
   } catch (err) {
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
   }
@@ -62,7 +62,7 @@ exports.update = async (req, res, next) => {
       await User.update(params, { where: { username: data.username } });
       return res.status(httpStatus.NO_CONTENT).send();
     }
-    return res.status(httpStatus.NOT_FOUND).json().send();
+    return res.status(httpStatus.BAD_REQUEST).json().send();
   } catch (err) {
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
   }

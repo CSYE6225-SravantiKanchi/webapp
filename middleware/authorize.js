@@ -29,4 +29,12 @@ const handler = async (req, res, next) => {
     }
 };
 
+const authNotRequired = async ( req,res, next) => {
+    if (!isEmpty(req.headers.authorization)) {
+        return res.status(httpStatus.BAD_REQUEST).json();
+    }
+    next();
+}
+
 exports.handler= handler;
+exports.authNotRequired = authNotRequired;
