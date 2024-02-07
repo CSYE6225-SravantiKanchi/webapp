@@ -6,6 +6,8 @@ This README provides instructions for deploying the webapp on a CentOS server an
 
 ## About
 
+TODO
+
 ## Prerequisites
 
 - Digital Ocean Signup.
