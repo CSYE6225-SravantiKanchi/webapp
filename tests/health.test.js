@@ -19,9 +19,9 @@ jest.mock('../models/user.model', (
 
   const dbMock = new Sequelize();
   return dbMock.define('user',  {
-    id: 2,
-    first_name: 'good',
-    last_name: 'day',
+    id: '10a8337b-d8f2-42b4-9b0d-55d57f5545a9',
+    first_name: 'random',
+    last_name: 'user',
     password: "random",
     username: 'dummy'
   })
