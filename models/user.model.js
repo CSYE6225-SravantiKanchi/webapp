@@ -1,11 +1,10 @@
-const { v4 : uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("user", {
       id: {
         type: Sequelize.UUID,
-        defaultValue: () => uuidv4(),
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
       first_name: {
@@ -23,6 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       username: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           isEmail: true,
         },
