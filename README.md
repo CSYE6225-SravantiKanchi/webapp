@@ -113,7 +113,12 @@ After logging into the server, install and set up the following:
     npm run dev
     ```
 
-    Adjust any commands as necessary for your specific webapp's start script.
+8. **Validate the Testcases**:
+ - Added testcases for Healthz API to validate, and will also be helpful for deployment check which we've added
+
+    ```bash
+    npm test
+    ```
 
 ### Conclusion
 
