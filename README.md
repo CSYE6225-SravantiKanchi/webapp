@@ -2,88 +2,119 @@
 
 ## Overview
 
-This README provides instructions for deploying the webapp on a CentOS server and setting up the environment locally.
+This README provides instructions for deploying the webapp on a CentOS server and for setting up the environment locally.
 
 ## About
 
-TODO
+This webapp is developed using Node.js in the Express framework with MySQL as the database. It features a user model with `first_name`, `last_name`, `password`, and `username` (where the username is an email address).
+
+As of the current version, four APIs have been developed:
+- `GET /heathz`: Checks the database connectivity.
+- `GET /v1/user/self`: Returns the user info if provided valid basic authentication.
+- `POST /v1/user`: Creates the user. This is an unauthenticated API.
+- `PUT /v1/user/self`: Used to update one or many fields of the user.
+
+For understanding the payload and schema requirements, refer to the Swagger documentation: [Cloud Native Webapp Swagger Docs](https://app.swaggerhub.com/apis-docs/csye6225-webapp/cloud-native-webapp/2024.spring.02).
+
+The application handles 404 (Not Found), 405 (Method Not Allowed), and 400 (Bad Request) errors, ensuring that no payload is returned for these error responses.
 
 ## Prerequisites
 
-- Digital Ocean Signup.
-- Generate an SSH Key, to provide this during droplet creation.
+- Sign up for Digital Ocean.
+- Generate an SSH key to use during droplet creation.
 
 ## CentOS Server Setup
-- Login to the Digital Ocean 
-- Select Signup a Droplet
-- Select Region as  Newyork, and the data center 1
-- Choose CentOS as OS Image with version as 8 stream x64
-- select CPU with basic SSD , and opt for 2 GB RAM / 1 CPU 50 GB SSD and 2 TOB Transfer ($12 / hour)
-- Configure the generated SSH public key - (https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/create-with-openssh/)
-- Create the Droplet, and note down the public IPV4
+
+- Log in to Digital Ocean.
+- Select "Create a Droplet."
+- Choose "New York" as the region and select data center 1.
+- Select CentOS as the OS image with version 8 stream x64.
+- Select a CPU option with basic SSD, and opt for 2 GB RAM / 1 CPU, 50 GB SSD, and 2 TB Transfer ($12 per hour).
+- Configure the generated SSH public key ([adding SSH keys guide](https://docs.digitalocean.com/products/droplets/how-to/add-ssh-keys/create-with-openssh/)).
+- Create the droplet and note down the public IPV4 address.
 
 ### Access the Server
-- For Accessing the server, we will use the openSSH
+
+To access the server, use OpenSSH:
 
 ```bash
 ssh -i ~/.ssh/sshkeyname root@IPV4
 ```
 
-### Downloading the Prerequisites of Webapp
-- After logging into the server, install and setup the following
+### Downloading the Prerequisites for the Webapp
 
-- Install, Enable and Start the server using following three commands. Then using mysql_secure_installation setup the root password.
+After logging into the server, install and set up the following:
 
-```bash
+- **MySQL Server**: Install, enable, and start MySQL Server. Then, use `mysql_secure_installation` to set up the root password:
+
+    ```bash
     dnf install mysql-server
     sudo systemctl start mysqld.service
     sudo systemctl enable mysqld.service
     sudo mysql_secure_installation
-```
+    ```
 
-- For Node.js, Install NVM using the following command, later install Node v18 and use v18 as default
+- **Node.js via NVM**: Install NVM, then install and use Node.js v18:
 
-```bash
+    ```bash
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    source ~/.bash_profile || source ~/.profile
     nvm install 18
     nvm use 18
-```
+    ```
 
-- For unzip our repo, install unzip libaray using the following command
+- **Unzip Library**: To unzip the webapp repository, install the unzip library:
 
-```bash
+    ```bash
     dnf install unzip
-```
-
+    ```
 
 ### Deployment of WebApp
- - first download the zip from the main branch of webapp (make sure it is not from forked repo).
- - Use the following SCP command to move the xip file from our system to the Created CentOS Droplet
-```bash
-     scp -i  ~/.ssh/sshkeyname webapp-main.zip root@IPV4:/root
-```
-- Then login into the server using the above mentioned access command.
-- unzip the repo using the following command
 
-```bash
-    unzip webapp-main.zp
-```
- - Then open the webapp-main directory
- - Install the Node dependencies using the following command
+1. **Download the WebApp**: Download the zip file from the main branch of the webapp (ensure it is not from a forked repo).
 
- ```bash
+2. **Transfer the WebApp**: Use the following SCP command to move the zip file from your system to the created CentOS Droplet:
+
+    ```bash
+    scp -i ~/.ssh/sshkeyname webapp-main.zip root@IPV4:/root
+    ```
+
+3. **Unzip the WebApp**: Log in to the server using the access command mentioned above, then unzip the repository:
+
+    ```bash
+    unzip webapp-main.zip
+    ```
+
+4. **WebApp Directory**: Navigate to the webapp-main directory:
+
+    ```bash
+    cd webapp-main
+    ```
+
+5. **Install Dependencies**: Install the Node.js dependencies:
+
+    ```bash
     npm install
- ```
- - Create a .env file and Add the following Environmental Variables
+    ```
 
- ```env
+6. **Environment Variables**: Create a `.env` file and add the following environmental variables:
+
+    ```env
     PORT=8080
     NODE_ENV=DEV
     SQL_URI=mysql://user:password@localhost:3306/yourDB
- ```
+    ```
 
- - Then to make the server up, run the following command
+    Replace `user`, `password`, and `yourDB` with your actual database credentials.
 
- ```bash
+7. **Start the WebApp**: To launch the server, run:
+
+    ```bash
     npm run dev
- ```
+    ```
+
+    Adjust any commands as necessary for your specific webapp's start script.
+
+### Conclusion
+
+Follow these steps to deploy your web application on a CentOS server. Remember to replace placeholder values with actual data relevant to your setup.
