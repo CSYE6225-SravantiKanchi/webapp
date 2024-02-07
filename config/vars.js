@@ -11,5 +11,6 @@ module.exports = {
   appName: appPackage.name,
   port: process.env.PORT,
   env: process.env.NODE_ENV,
-  sqlUri: process.env.SQL_URI
+  sqlUri: process.env.SQL_URI,
+  database: process.env.DATABASE
 };

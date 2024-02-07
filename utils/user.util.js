@@ -6,7 +6,7 @@ const getUserInfo = async (params) => {
     try{
     const user = await User.findOne({ where: { username: params.username } });
     if(isEmpty(user)){
-        return { statusCode: httpStatus.BAD_REQUEST }
+        return { statusCode: httpStatus.UNAUTHORIZED }
     }
     if (!isEmpty(params.password)) {
      const isMatch = await user.comparePassword(params.password);

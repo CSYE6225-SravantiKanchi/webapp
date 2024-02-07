@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
-const { sqlUri } = require('./vars');
+const { sqlUri, database } = require('./vars');
 
 /**
  *followed https://sequelize.org/docs/v6/getting-started/
  */
-const sequelize = new Sequelize(sqlUri);
+const sequelize = new Sequelize(`${sqlUri}${database}`);
 
 exports.sequelize = sequelize;
