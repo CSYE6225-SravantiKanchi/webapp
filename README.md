@@ -23,6 +23,16 @@ The application handles 404 (Not Found), 405 (Method Not Allowed), and 400 (Bad 
 - Sign up for Digital Ocean.
 - Generate an SSH key to use during droplet creation.
 
+- **Local Deployment Setup**
+- For local deployment: Install MySQL, Git, Nvm
+- Once the Nvm is installed, use Node.js version 18.x
+```bash
+    nvm install 18
+    nvm use 18
+```
+- Clone the repository and select the Main Branch
+- Only Main Branch contains the latest Code, do not clone other or fork branches
+
 ## CentOS Server Setup
 
 - Log in to Digital Ocean.
@@ -41,7 +51,7 @@ To access the server, use OpenSSH:
 ssh -i ~/.ssh/sshkeyname root@IPV4
 ```
 
-### Downloading the Prerequisites for the Webapp
+### Downloading the Prerequisites for the Webapp in CentOS
 
 After logging into the server, install and set up the following:
 
@@ -65,13 +75,15 @@ After logging into the server, install and set up the following:
     nvm use 18
     ```
 
+
 - **Unzip Library**: To unzip the webapp repository, install the unzip library:
 
     ```bash
     dnf install unzip
     ```
 
-### Deployment of WebApp
+### Deployment of WebApp (Locally / or in CentOS)
+
 
 1. **Download the WebApp**: Download the zip file from the main branch of the webapp (ensure it is not from a forked repo).
 
@@ -81,7 +93,7 @@ After logging into the server, install and set up the following:
     scp -i ~/.ssh/sshkeyname webapp-main.zip root@IPV4:/root
     ```
 
-3. **Unzip the WebApp**: Log in to the server using the access command mentioned above, then unzip the repository:
+3. **Unzip the WebApp in CentOS**: Log in to the server using the access command mentioned above, then unzip the repository:
 
     ```bash
     unzip webapp-main.zip
