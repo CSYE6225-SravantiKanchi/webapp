@@ -48,7 +48,7 @@ The application handles 404 (Not Found), 405 (Method Not Allowed), and 400 (Bad 
 To access the server, use OpenSSH:
 
 ```bash
-ssh -i ~/.ssh/sshkeyname root@IPV4
+ssh -i ~/.ssh/sshkeyname rootoruser@IPV4
 ```
 
 ### Downloading the Prerequisites for the Webapp in CentOS
@@ -90,7 +90,7 @@ After logging into the server, install and set up the following:
 2. **Transfer the WebApp**: Use the following SCP command to move the zip file from your system to the created CentOS Droplet:
 
     ```bash
-    scp -i ~/.ssh/sshkeyname webapp-main.zip root@IPV4:/root
+    scp -i ~/.ssh/sshkeyname webapp-main.zip rootoruser@IPV4:/root
     ```
 
 3. **Unzip the WebApp in CentOS**: Log in to the server using the access command mentioned above, then unzip the repository:
