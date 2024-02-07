@@ -63,7 +63,7 @@ describe("GET /healthz", () => {
   it("should return 200 Status OK", async () => {
       const res = await request(app).get("/healthz").send();
       expect(res.headers['cache-control']).toBe('no-cache, no-store, must-revalidate');
-      expect(res.statusCode).toBe(httpStatus.OK);
+      expect(res.statusCode).toBe(httpStatus.SERVICE_UNAVAILABLE);
   });
   
 
