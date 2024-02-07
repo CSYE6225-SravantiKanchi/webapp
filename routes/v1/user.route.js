@@ -13,7 +13,7 @@ const {
 
 
 router
-  .route('/self')
+  .route('/')
   /**
    * @api {post} v1/user/self add feature for user collection
    * @apiDescription to create users
@@ -24,9 +24,10 @@ router
    *
    * @apiHeader {String} Authorization  No Authorization
    *
-   * @apiSuccess {Object} Users
+   * @apiSuccess {Object} User
    */
-  .post(authNotRequired, validate(create), controller.create);
+  .post(authNotRequired, validate(create), controller.create).
+  all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());
 
 router
   .route('/self')
@@ -36,11 +37,11 @@ router
    * @apiVersion 1.0.0
    * @apiName create
    * @apiGroup User
-   * @apiPermission public
+   * @apiPermission public, nno payload allowed
    *
    * @apiHeader {String} Authorization  user's basic auth
    *
-   * @apiSuccess {Object} Users
+   * @apiSuccess {Object} User
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
    */
   .get(noPayload, authorize, controller.read);
@@ -48,20 +49,20 @@ router
 router
   .route('/self')
   /**
-   * @api {put} api/v1/config/update add feature for config collection
+   * @api {put} v1/user/self add feature for user collection
    * @apiDescription to update user info
    * @apiVersion 1.0.0
    * @apiName update
    * @apiGroup User
    * @apiPermission public
    *
-   * @apiHeader {String} Authorization  User's access token
+   * @apiHeader {String} Authorization  User's basic token
    *
-   * @apiSuccess {Object} Users
+   * @apiSuccess {Object} No Content
    *
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
    */
   .put(validate(update), authorize, controller.update).
-  all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());;
+  all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());
 
 module.exports = router;
