@@ -7,9 +7,9 @@ jobs:
     name: Build and Integration Tests
     runs-on: ubuntu-latest
     env:
-      DB_DATABASE: ${{ secrets.DATABASE }}
+      DB_DATABASE: test_db
       DB_USER: root
-      DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      DB_PASSWORD: root
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
