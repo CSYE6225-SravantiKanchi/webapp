@@ -31,5 +31,8 @@ jobs:
           sudo /etc/init.d/mysql start
           mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
 
+      - name: Check MySQL service status
+        run: sudo systemctl status mysql
+
       - name: Run Integration Tests
         run: npm run test:integration
