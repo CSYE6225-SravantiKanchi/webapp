@@ -1,12 +1,13 @@
 {
   "name": "csye_6225_assignment1",
   "version": "1.0.0",
-  "description": "Assignment 1 which handles health check API",
+  "description": "Cloud Assignments",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "jest --config=jest.config.js",
+    "test:integration": "jest --config=jest.integration.config.js",
     "coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "author": "Sravanti Kanchi",
