@@ -31,6 +31,9 @@ jobs:
           sudo /etc/init.d/mysql start
           mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
 
+      - name: Enable MySQL service
+        run: sudo systemctl enable mysql
+        
       - name: Check MySQL service status
         run: sudo systemctl status mysql
 
