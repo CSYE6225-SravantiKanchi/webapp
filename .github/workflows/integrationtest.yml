@@ -7,11 +7,11 @@ jobs:
     name: Build and Integration Tests
     runs-on: ubuntu-latest
     env:
-      DB_DATABASE: test_db
-      DB_USER: root
-      DB_PASSWORD: root
-      SQL_URI: "mysql://root:root@127.0.0.1:3306/"
-      DATABASE: test_db
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      SQL_URI: ${{ secrets.SQL_URI }}
+      DATABASE: ${{ secrets.DATABASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
