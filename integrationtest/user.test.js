@@ -2,10 +2,14 @@ require('dotenv').config();
 const request = require("supertest");
 const app = require("../config/express");
 const httpStatus = require('http-status');
-const { sequelize } = require('../config/sequelize');
+const { sequelize } = require('../models'); 
 
-console.log(`this is the sql uri ${process.env.SQL_URI}${process.env.DATABASE}`);
 describe("User Tests", () => {
+
+    beforeAll(async () => {
+        await sequelize.sync({ alter: true });
+    });
+
     it("should create an account and validate its existence", async () => {
         const payload = {
                 first_name: "Random",
