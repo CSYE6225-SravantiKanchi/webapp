@@ -10,7 +10,7 @@ jobs:
       DB_DATABASE: test_db
       DB_USER: root
       DB_PASSWORD: root
-      SQL_URI: "mysql://root:root@localhost:3306/"
+      SQL_URI: "mysql://root:root@127.0.0.1:3306/"
       DATABASE: test_db
     steps:
       - name: Checkout code
@@ -33,7 +33,7 @@ jobs:
 
       - name: Enable MySQL service
         run: sudo systemctl enable mysql
-        
+
       - name: Check MySQL service status
         run: sudo systemctl status mysql
 
