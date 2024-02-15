@@ -116,7 +116,8 @@ After logging into the server, install and set up the following:
     ```env
     PORT=8080
     NODE_ENV=DEV
-    SQL_URI=mysql://user:password@localhost:3306/yourDB
+    SQL_URI=mysql://user:password@localhost:3306
+    DATABASE= yourDB
     ```
 
     Replace `user`, `password`, and `yourDB` with your actual database credentials.
