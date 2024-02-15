@@ -128,10 +128,18 @@ After logging into the server, install and set up the following:
     ```
 
 8. **Validate the Testcases**:
- - Added testcases for Healthz API to validate, and will also be helpful for deployment check which we've added
+ - Added test cases for Healthz API to validate, and will also be helpful for deployment check which we've added
 
     ```bash
     npm test
+    ```
+
+9. **Validate the Integration Testcases**:
+ - Added test cases for create and update account by calling get account.
+ - Added a jest configuration for this.
+
+    ```bash
+    npm run test:integration
     ```
 
 ### Conclusion
