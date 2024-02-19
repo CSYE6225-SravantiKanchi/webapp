@@ -29,9 +29,9 @@ jobs:
           fi
 
       - name: Initiate Packer template
-        run: packer init ./packerconfig/main.pkr.hcl
+        run: packer init -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
 
       - name: Validate Packer template
-        run: packer validate ./packerconfig/main.pkr.hcl
+        run: packer validate -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
       
 
