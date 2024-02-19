@@ -74,10 +74,10 @@ jobs:
           PACKER_VERSION: 1.7.3
 
       # - name: Initializing Packer
-      #   run: packer init ./packer/main.pkr.hcl
+      #   run: packer init ./packerconfig/main.pkr.hcl
 
       # - name: Building the Image
-      #   run: packer build ./packer/main.pkr.hcl
+      #   run: packer build ./packerconfig/main.pkr.hcl
       
 
 
