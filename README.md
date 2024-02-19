@@ -116,7 +116,8 @@ After logging into the server, install and set up the following:
     ```env
     PORT=8080
     NODE_ENV=DEV
-    SQL_URI=mysql://user:password@localhost:3306/yourDB
+    SQL_URI=mysql://user:password@localhost:3306
+    DATABASE= yourDB
     ```
 
     Replace `user`, `password`, and `yourDB` with your actual database credentials.
@@ -128,10 +129,18 @@ After logging into the server, install and set up the following:
     ```
 
 8. **Validate the Testcases**:
- - Added testcases for Healthz API to validate, and will also be helpful for deployment check which we've added
+ - Added test cases for Healthz API to validate, and will also be helpful for deployment check which we've added
 
     ```bash
     npm test
+    ```
+
+9. **Validate the Integration Testcases**:
+ - Added test cases for create and update account by calling get account.
+ - Added a jest configuration for this.
+
+    ```bash
+    npm run test:integration
     ```
 
 ### Conclusion
