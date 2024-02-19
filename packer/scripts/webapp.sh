@@ -1,0 +1,23 @@
+echo "web application service starting now"
+
+#moving it to csye6225 user directory
+sudo mv ~/webapp /home/csye6225/
+
+#unzipping the zip file
+sudo unzip /home/csye6225/webapp -d /home/csye6225/
+
+#installing the libraries
+sudo npm install --prefix /home/csye6225/webapp_dev/
+
+#changing the ownership
+sudo chown -R csye6225:csye6225 /home/csye6225/webapp_dev/
+
+#moving the weapp.service to systemd path
+sudo cp /home/csye6225/webapp_dev/webapp.service /lib/systemd/system/webapp.service
+
+#starting and enalbing the webapp
+sudo systemctl start webapp
+sudo systemctl enable webapp
+
+#reloading the system services
+sudo systemctl daemon-reload
