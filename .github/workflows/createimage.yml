@@ -17,6 +17,8 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          create_credentials_file: true
+          export_environment_variables: true
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
@@ -24,10 +26,6 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      - name: Setup Google Cloud Credentials
-        run: |
-          echo "${{ secrets.GCP_CREDENTIALS }}" > $HOME/gcp-creds.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-creds.json" >> $GITHUB_ENV
       - name: Verify Credentials File
         run: |
           cat $HOME/gcp-creds.json
@@ -73,14 +71,12 @@ jobs:
 
       - name: Setting up Packer
         run: |
-          wget https://releases.hashicorp.com/packer/${{ env.PACKER_VERSION }}/packer_${{ env.PACKER_VERSION }}_linux_amd64.zip
-          unzip -o packer_${{ env.PACKER_VERSION }}_linux_amd64.zip
+          wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
+          unzip -o packer_1.7.3_linux_amd64.zip
           sudo rm -rf /usr/local/bin/packer
           chmod +x packer
           sudo mv packer /usr/local/bin/
-        env:
-          PACKER_VERSION: 1.7.3
-
+          
       - name: Initializing Packer
         run: packer init ./packerconfig/main.pkr.hcl
 
