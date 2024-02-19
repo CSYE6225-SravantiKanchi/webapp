@@ -59,7 +59,7 @@ build {
 
 
   provisioner "shell" {
-    scripts = ["./scripts/usergroup.sh"]
+    scripts = ["packer/scripts/usergroup.sh"]
 
   }
 
@@ -68,7 +68,7 @@ build {
     destination = "/home/ubuntu/webapp"
   }
   provisioner "shell" {
-    scripts = ["./scripts/setup.sh", "./scripts/webapp.sh"]
+    scripts = ["packer/scripts/setup.sh", "packer/scripts/webapp.sh"]
 
   }
 

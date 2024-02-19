@@ -8,17 +8,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Install Packer
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y packer
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Zip Web App
+        run: zip -r webapp.zip ./
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Initiate Packer template
+        run: packer fmt -check -recursive ./packer/main.pkr.hcl
+      
+      - name: Validating Packer Formatting
+        run: |
+          packer fmt -check -recursive ./packer
+          if [ $? -ne 0 ]; then
+            echo "Packer template formatting issues found. Please run 'packer fmt' to fix them."
+            exit 1
+          fi
+          
       - name: Initiate Packer template
         run: packer init ./packer/main.pkr.hcl
 
       - name: Validate Packer template
         run: packer validate ./packer/main.pkr.hcl
+      
 
