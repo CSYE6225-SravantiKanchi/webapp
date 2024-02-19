@@ -26,10 +26,6 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      - name: Verify Credentials File
-        run: |
-          cat $HOME/gcp-creds.json
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -76,7 +72,7 @@ jobs:
           sudo rm -rf /usr/local/bin/packer
           chmod +x packer
           sudo mv packer /usr/local/bin/
-          
+
       - name: Initializing Packer
         run: packer init ./packerconfig/main.pkr.hcl
 
