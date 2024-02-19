@@ -1,0 +1,82 @@
+name: image creator CI
+
+on: [ push ]  #just for testing purpose
+
+jobs:
+  build:
+    name: Create a machine image
+    runs-on: ubuntu-latest
+    env:
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      SQL_URI: ${{ secrets.SQL_URI }}
+      DATABASE: ${{ secrets.DATABASE }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          create_credentials_file: true
+          export_environment_variables: true
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Add an .env file
+        run: |
+          touch .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "MYSQL_URI=${{ secrets.MYSQL_URI }}" >> .env
+          echo "DATABASE=${{ secrets.DATABASE }}" >> .env
+      
+      - name: Zip the application
+        run: |
+          zip -r webapp.zip ./
+      
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Install MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install mysql-server
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE IF NOT EXISTS $DATABASE;" -u$DB_USER -p$DB_PASSWORD
+
+      - name: Enable MySQL service
+        run: sudo systemctl enable mysql
+
+      - name: Check MySQL service status
+        run: sudo systemctl status mysql
+
+      - name: Run Integration Tests
+        run: npm run test:integration      
+
+      - name: Setting up Packer
+        run: |
+          wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
+          unzip -o packer_1.7.3_linux_amd64.zip
+          sudo rm -rf /usr/local/bin/packer
+          chmod +x packer
+          sudo mv packer /usr/local/bin/
+
+      - name: Initializing Packer
+        run: packer init ./packerconfig/main.pkr.hcl
+
+      - name: Building the Image
+        run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl      
+
