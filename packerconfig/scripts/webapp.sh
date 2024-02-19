@@ -1,7 +1,10 @@
 echo "web application service starting now"
 
+#creating a folder where we need unzip the webapp
+sudo mkdir /home/csye6225/webapp
+
 #moving it to csye6225 user directory
-sudo mv ~/webapp /home/csye6225/
+sudo mv ~/webapp /home/csye6225/webapp
 
 #unzipping the zip file
 sudo unzip /home/csye6225/webapp -d /home/csye6225/
