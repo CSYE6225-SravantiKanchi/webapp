@@ -9,12 +9,10 @@ packer {
 
 variable "project_id" {
   description = "Google Cloud project ID"
-  default     = "cloud-assigment-4"
 }
 
 variable "zone" {
   description = "Zone where the image will be built"
-  default     = "us-east5-a"
 }
 
 variable "disk_size" {
