@@ -51,23 +51,23 @@ jobs:
       - name: Run Integration Tests
         run: npm run test:integration      
 
-      # - name: Add an .env file
-      #   run: |
-      #     touch .env
-      #     echo "PORT=${{ secrets.PORT }}" >> .env
-      #     echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-      #     echo "MYSQL_URI=${{ secrets.MYSQL_URI }}" >> .env
-      #     echo "DATABASE=${{ secrets.DATABASE }}" >> .env
+      - name: Add an .env file
+        run: |
+          touch .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "MYSQL_URI=${{ secrets.MYSQL_URI }}" >> .env
+          echo "DATABASE=${{ secrets.DATABASE }}" >> .env
       
-      # - name: Zip the application
-      #   run: |
-      #     zip -r webapp.zip ./
+      - name: Zip the application
+        run: |
+          zip -r webapp.zip ./
       
-      # - name: Setting up Packer
-      #   run: |
-      #     wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
-      #     unzip packer_1.7.3_linux_amd64.zip
-      #     chmod +x packer
+      - name: Setting up Packer
+        run: |
+          wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
+          unzip packer_1.7.3_linux_amd64.zip
+          chmod +x packer
       
       # - name: Initializing Packer
       #   run: packer init ./packer/main.pkr.hcl
