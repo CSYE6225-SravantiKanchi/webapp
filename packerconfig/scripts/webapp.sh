@@ -7,7 +7,10 @@ sudo mkdir /home/csye6225/webapp
 sudo mv ~/webapp_main.zip /home/csye6225/webapp
 
 #unzipping the zip file
-sudo unzip /home/csye6225/webapp_main.zip -d /home/csye6225/webapp
+sudo unzip /home/csye6225/webapp/webapp_main.zip -d /home/csye6225/webapp
+
+#removing zip the webapp_main
+sudo rm /home/csye6225/webapp/webapp_main.zip
 
 #installing the libraries
 sudo npm install --prefix /home/csye6225/webapp/
