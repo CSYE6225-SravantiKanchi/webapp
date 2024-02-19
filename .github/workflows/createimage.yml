@@ -28,7 +28,10 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS }}" > $HOME/gcp-creds.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-creds.json" >> $GITHUB_ENV
-          
+      - name: Verify Credentials File
+        run: |
+          cat $HOME/gcp-creds.json
+
       - name: Checkout code
         uses: actions/checkout@v2
 

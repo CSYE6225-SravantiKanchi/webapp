@@ -22,7 +22,7 @@ jobs:
       
       - name: Validating Packer Formatting
         run: |
-          packer fmt -check -recursive ./packer
+          packer fmt -check -recursive ./packerconfig
           if [ $? -ne 0 ]; then
             echo "Packer template formatting issues found. Please run 'packer fmt' to fix them."
             exit 1
