@@ -70,7 +70,9 @@ jobs:
           sudo rm -rf /usr/local/bin/packer
           chmod +x packer
           sudo mv packer /usr/local/bin/
-      
+        env:
+          PACKER_VERSION: 1.7.3
+
       # - name: Initializing Packer
       #   run: packer init ./packer/main.pkr.hcl
 
