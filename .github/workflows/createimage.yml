@@ -23,7 +23,12 @@ jobs:
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
-      
+
+      - name: Setup Google Cloud Credentials
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > $HOME/gcp-creds.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-creds.json" >> $GITHUB_ENV
+          
       - name: Checkout code
         uses: actions/checkout@v2
 

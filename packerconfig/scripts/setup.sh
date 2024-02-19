@@ -2,7 +2,7 @@
 
 
 #Making the libraries Upto Date
-#sudo dnf update -y
+#sudo dnf update -y  #TODO: uncomment it
 
 #install unzip
 sudo dnf install -y unzip
