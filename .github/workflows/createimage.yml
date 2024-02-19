@@ -24,32 +24,32 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
       
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # - name: Use Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '18.x'
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
       
-      # - name: Install npm dependencies
-      #   run: npm install
+      - name: Install npm dependencies
+        run: npm install
 
-      # - name: Install MySQL
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install mysql-server
-      #     sudo /etc/init.d/mysql start
-      #     mysql -e "CREATE DATABASE IF NOT EXISTS $DATABASE;" -u$DB_USER -p$DB_PASSWORD
+      - name: Install MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install mysql-server
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE IF NOT EXISTS $DATABASE;" -u$DB_USER -p$DB_PASSWORD
 
-      # - name: Enable MySQL service
-      #   run: sudo systemctl enable mysql
+      - name: Enable MySQL service
+        run: sudo systemctl enable mysql
 
-      # - name: Check MySQL service status
-      #   run: sudo systemctl status mysql
+      - name: Check MySQL service status
+        run: sudo systemctl status mysql
 
-      # - name: Run Integration Tests
-      #   run: npm run test:integration      
+      - name: Run Integration Tests
+        run: npm run test:integration      
 
       # - name: Add an .env file
       #   run: |
