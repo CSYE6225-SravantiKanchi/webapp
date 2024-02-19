@@ -63,7 +63,7 @@ build {
 
   provisioner "file" {
     source      = "./webapp.zip"
-    destination = "/home/ubuntu/webapp"
+    destination = "/home/ubuntu/webapp_main.zip"
   }
   provisioner "shell" {
     scripts = ["packerconfig/scripts/setup.sh", "packerconfig/scripts/webapp.sh"]
