@@ -43,7 +43,7 @@ variable "ssh_username" {
 source "googlecompute" "centos-example" {
   project_id           = var.project_id
   source_image         = var.source_image
-  image_name           = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
+  image_name           = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                 = var.zone
   disk_size            = var.disk_size
   disk_type            = var.disk_type
