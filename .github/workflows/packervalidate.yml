@@ -18,20 +18,18 @@ jobs:
         uses: hashicorp/setup-packer@main
 
       - name: Initiate Packer template
-        run: packer fmt -check -recursive ./packer/main.pkr.hcl
+        run: packer fmt -check -recursive ./packerconfig/main.pkr.hcl
       
       - name: Validating Packer Formatting
         run: |
-          packer fmt -check -recursive ./packer
+          packer fmt -check -recursive ./packerconfig
           if [ $? -ne 0 ]; then
             echo "Packer template formatting issues found. Please run 'packer fmt' to fix them."
             exit 1
           fi
-          
       - name: Initiate Packer template
-        run: packer init ./packer/main.pkr.hcl
+        run: packer init -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
 
       - name: Validate Packer template
-        run: packer validate ./packer/main.pkr.hcl
+        run: packer validate -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
       
-

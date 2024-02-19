@@ -9,12 +9,10 @@ packer {
 
 variable "project_id" {
   description = "Google Cloud project ID"
-  default     = "cloud-assigment-4"
 }
 
 variable "zone" {
   description = "Zone where the image will be built"
-  default     = "us-east5-a"
 }
 
 variable "disk_size" {
@@ -45,6 +43,7 @@ variable "ssh_username" {
 source "googlecompute" "centos-example" {
   project_id           = var.project_id
   source_image         = var.source_image
+  image_name           = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                 = var.zone
   disk_size            = var.disk_size
   disk_type            = var.disk_type
@@ -59,16 +58,16 @@ build {
 
 
   provisioner "shell" {
-    scripts = ["packer/scripts/usergroup.sh"]
+    scripts = ["packerconfig/scripts/usergroup.sh"]
 
   }
 
   provisioner "file" {
     source      = "./webapp.zip"
-    destination = "/home/ubuntu/webapp"
+    destination = "/home/ubuntu/webapp_main.zip"
   }
   provisioner "shell" {
-    scripts = ["packer/scripts/setup.sh", "packer/scripts/webapp.sh"]
+    scripts = ["packerconfig/scripts/setup.sh", "packerconfig/scripts/webapp.sh"]
 
   }
 
