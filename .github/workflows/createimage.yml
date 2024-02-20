@@ -12,6 +12,7 @@ jobs:
       SQL_URI: ${{ secrets.SQL_URI }}
       DATABASE: ${{ secrets.DATABASE }}
       NODE_ENV: ${{ secrets.NODE_ENV }}
+      PKR_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     steps:
 
       - name: Checkout code
