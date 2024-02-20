@@ -57,5 +57,6 @@ describe("User Tests", () => {
     afterAll(async () => {
 
         await sequelize.close();
+        
     });
 });
