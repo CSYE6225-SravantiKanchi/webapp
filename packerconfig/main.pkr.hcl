@@ -42,7 +42,7 @@ variable "ssh_username" {
 
 variable "DB_PASSWORD" {
   description = "The username for SSH access"
-  default     = "{{env `DB_PASSWORD`}}"
+  default     = "test"
 }
 
 source "googlecompute" "centos-example" {
