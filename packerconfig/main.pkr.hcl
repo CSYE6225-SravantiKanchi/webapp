@@ -57,7 +57,7 @@ source "googlecompute" "centos-example" {
   zone                 = var.zone
   disk_size            = var.disk_size
   disk_type            = var.disk_type
-  image_family         = "csye6225",
+  image_family         = "csye6225"
   wait_to_add_ssh_keys = "20s"
   network              = var.network
   communicator         = "ssh"
