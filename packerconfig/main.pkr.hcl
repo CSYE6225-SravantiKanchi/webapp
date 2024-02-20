@@ -40,6 +40,11 @@ variable "ssh_username" {
   default     = "ubuntu"
 }
 
+variable "DB_PASSWORD" {
+  description = "The username for SSH access"
+  default     = "{{env `DB_PASSWORD`}}"
+}
+
 source "googlecompute" "centos-example" {
   project_id           = var.project_id
   source_image         = var.source_image
@@ -67,6 +72,9 @@ build {
     destination = "/home/ubuntu/webapp_main.zip"
   }
   provisioner "shell" {
+    environment_vars = [
+      "DB_PASSWORD=${var.DB_PASSWORD}"
+    ]
     scripts = ["packerconfig/scripts/setup.sh", "packerconfig/scripts/webapp.sh"]
 
   }

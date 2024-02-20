@@ -21,9 +21,9 @@ sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 #moving the weapp.service to systemd path
 sudo cp /home/csye6225/webapp/webapp.service /lib/systemd/system/webapp.service
 
-#starting and enalbing the webapp
-sudo systemctl start webapp
-sudo systemctl enable webapp
-
 #reloading the system services
 sudo systemctl daemon-reload
+
+#starting and enalbing the webapp
+sudo systemctl start webapp #TODO : fail if it doesn't work
+sudo systemctl enable webapp  
