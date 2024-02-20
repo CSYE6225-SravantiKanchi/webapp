@@ -1,6 +1,6 @@
 name: image creator CI
 
-on: [ push ]  #just for testing purpose
+on: [ pull_request ]  #just for testing purpose
 
 jobs:
   build:
