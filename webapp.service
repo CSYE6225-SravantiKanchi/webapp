@@ -8,7 +8,7 @@ After=network.target
 Type=simple
 User=csye6225
 Group=csye6225
-ExecStart=/usr/bin/node /home/csye6225/webapp_dev/index.js
+ExecStart=/usr/bin/node /home/csye6225/webapp/index.js
 
 # Restart service after 3 seconds if node service crashes
 Restart=always
