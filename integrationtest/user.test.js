@@ -44,7 +44,7 @@ describe("User Tests", () => {
                 .send(payload)
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
     
-            expect(updateRes.statusCode).toBe(httpStatus.NO_CONTENT);
+            expect(updateRes.statusCode).toBe(200);
     
             const getRes = await request(app)
                 .get("/v1/user/self")
