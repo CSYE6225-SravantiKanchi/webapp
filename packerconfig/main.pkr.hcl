@@ -45,6 +45,11 @@ variable "DB_PASSWORD" {
   default     = "test"
 }
 
+variable "DB_USER" {
+  description = "The username for SSH access"
+  default     = "test"
+}
+
 source "googlecompute" "centos-example" {
   project_id           = var.project_id
   source_image         = var.source_image
@@ -52,6 +57,7 @@ source "googlecompute" "centos-example" {
   zone                 = var.zone
   disk_size            = var.disk_size
   disk_type            = var.disk_type
+  image_family         = "csye6225",
   wait_to_add_ssh_keys = "20s"
   network              = var.network
   communicator         = "ssh"
