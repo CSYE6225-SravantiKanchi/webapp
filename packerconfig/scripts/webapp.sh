@@ -19,7 +19,7 @@ sudo npm install --prefix /home/csye6225/webapp/
 sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 
 #moving the weapp.service to systemd path
-sudo cp /home/csye6225/webapp/webapp.service /lib/systemd/system/webapp.service
+sudo cp /home/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
 
 #reloading the system services
 sudo systemctl daemon-reload

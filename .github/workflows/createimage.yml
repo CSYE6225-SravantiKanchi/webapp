@@ -42,7 +42,7 @@ jobs:
           touch .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-          echo "MYSQL_URI=${{ secrets.MYSQL_URI }}" >> .env
+          echo "SQL_URI=${{ secrets.SQL_URI }}" >> .env
           echo "DATABASE=${{ secrets.DATABASE }}" >> .env
       
       - name: Zip the application
