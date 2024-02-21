@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #creating a user group
 sudo groupadd -f csye6225
