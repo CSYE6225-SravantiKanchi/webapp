@@ -56,15 +56,15 @@ variable "image_family" {
 }
 
 source "googlecompute" "centos-example" {
-  project_id           = var.project_id
-  source_image_family  = var.source_image_family
-  image_name           = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
-  zone                 = var.zone
-  disk_size            = var.disk_size
-  disk_type            = var.disk_type
-  image_family         = var.image_family
-  network              = var.network
-  ssh_username         = var.ssh_username
+  project_id          = var.project_id
+  source_image_family = var.source_image_family
+  image_name          = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
+  zone                = var.zone
+  disk_size           = var.disk_size
+  disk_type           = var.disk_type
+  image_family        = var.image_family
+  network             = var.network
+  ssh_username        = var.ssh_username
 }
 
 build {
