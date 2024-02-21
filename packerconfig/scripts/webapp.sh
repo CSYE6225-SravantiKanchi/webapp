@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 
 #creating a folder where we need unzip the webapp
