@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 
 #Making the libraries Upto Date
 sudo dnf update -y

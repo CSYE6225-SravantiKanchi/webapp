@@ -1,4 +1,4 @@
-echo "web application service starting now"
+set -e
 
 #creating a folder where we need unzip the webapp
 sudo mkdir /home/csye6225/webapp
