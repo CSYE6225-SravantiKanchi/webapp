@@ -2,7 +2,7 @@
 
 
 #Making the libraries Upto Date
-#sudo dnf update -y
+sudo dnf update -y
 
 #install unzip
 sudo dnf install -y unzip
@@ -13,7 +13,7 @@ sudo systemctl start mysqld.service
 sudo systemctl enable mysqld.service
 
 sudo echo $DB_PASSWORD
-mysqladmin -u root password $DB_PASSWORD #TODO - check what to do here??
+mysqladmin -u $DB_USER password $DB_PASSWORD
 
 
 #node v18.X setup
