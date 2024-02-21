@@ -146,3 +146,44 @@ After logging into the server, install and set up the following:
 ### Conclusion
 
 Follow these steps to deploy your web application on a CentOS server. Remember to replace placeholder values with actual data relevant to your setup.
+
+
+##  Assignment 4 Packer Setup
+
+### Packer automation
+
+Added a packer script to create a custom CentOS 8 image that includes the following pre-installed components:
+
+MySQL Server
+Node.js (via npm, using version 18)
+Unzip library
+Web application source code, automatically unzipped
+Node.js dependencies pre-installed
+Systemd service setup for the web application
+Additionally, the Packer script configures a non-login user csye6225 with ownership of the web application directory. The web application is configured to start automatically via a Systemd service file, ensuring that the application launches at boot time without manual intervention.
+
+### Image Creation Process Overview
+
+This project employs a GitHub Actions workflow for image creation on merging with main:
+
+- **GCP Authentication**: Authenticates with Google Cloud Platform using a service account to manage resources.
+
+- **Configuration & Packaging**:
+  - Creates an `.env` file for necessary environment variables.
+  - Zips the web application codebase for deployment.
+
+- **Node.js & MySQL Installation**: Installs Node.js and MySQL to prepare the environment for the web application and its integration tests.
+
+- **Integration Testing**: Executes integration tests to ensure seamless interaction between the web application and the database.
+
+- **Packer Setup**: Installs Packer for automating the creation of a virtual machine image, including the web application and its dependencies.
+
+- **Packer Image Creation**: Runs Packer to build a virtual machine image, ready for deployment with all required configurations and software.
+
+### Packer Validation Overview
+This project employs a GitHub Actions workflow for packer validation creation on raising pull requests with main
+
+- Packer Format check 
+- Packer Validate check
+
+
