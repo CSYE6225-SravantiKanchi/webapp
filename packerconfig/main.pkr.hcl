@@ -75,11 +75,12 @@ build {
 
   provisioner "file" {
     source      = "./webapp.zip"
-    destination = "/home/ubuntu/webapp_main.zip"
+    destination = "/tmp/webapp_main.zip"  #previous it was in /home/ubuntu/webapp_main.zip
   }
   provisioner "shell" {
     environment_vars = [
-      "DB_PASSWORD=${var.DB_PASSWORD}"
+      "DB_PASSWORD=${var.DB_PASSWORD}",
+      "DB_USER=${var.DB_USER}"
     ]
     scripts = ["packerconfig/scripts/setup.sh", "packerconfig/scripts/webapp.sh"]
 
