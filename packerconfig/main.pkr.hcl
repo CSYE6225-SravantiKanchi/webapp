@@ -25,9 +25,9 @@ variable "disk_type" {
   default     = "pd-standard"
 }
 
-variable "source_image" {
+variable "source_image_family" {
   description = "The source image family for the machine image"
-  default     = "centos-stream-8-v20240110"
+  default     = "centos-stream-8"
 }
 
 variable "network" {
@@ -50,17 +50,20 @@ variable "DB_USER" {
   default     = "test"
 }
 
+variable "image_family" {
+  description = "Assigning a image family"
+  default     = "csye6225"
+}
+
 source "googlecompute" "centos-example" {
   project_id           = var.project_id
-  source_image         = var.source_image
+  source_image_family  = var.source_image_family
   image_name           = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                 = var.zone
   disk_size            = var.disk_size
   disk_type            = var.disk_type
-  image_family         = "csye6225"
-  wait_to_add_ssh_keys = "20s"
+  image_family         = var.image_family
   network              = var.network
-  communicator         = "ssh"
   ssh_username         = var.ssh_username
 }
 
