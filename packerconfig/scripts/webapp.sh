@@ -12,9 +12,12 @@ sudo rm /tmp/webapp_main.zip
 
 #installing the libraries
 sudo npm install --prefix /home/csye6225/webapp/
-
+ 
 #changing the ownership
 sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
+
+#displaying the ownership
+sudo ls -al /home/csye6225/webapp/
 
 #moving the weapp.service to systemd path
 sudo cp /home/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
