@@ -22,5 +22,5 @@ sudo cp /home/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
 sudo systemctl daemon-reload
 
 #starting and enalbing the webapp
-sudo systemctl start webapp #TODO : fail if it doesn't work
+sudo systemctl start webapp
 sudo systemctl enable webapp  
