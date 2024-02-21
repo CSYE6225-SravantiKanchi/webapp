@@ -75,7 +75,7 @@ build {
 
   provisioner "file" {
     source      = "./webapp.zip"
-    destination = "/tmp/webapp_main.zip"  #previous it was in /home/ubuntu/webapp_main.zip
+    destination = "/tmp/webapp_main.zip"
   }
   provisioner "shell" {
     environment_vars = [
