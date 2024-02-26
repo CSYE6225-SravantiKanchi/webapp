@@ -3,6 +3,7 @@ Description=Sravanti's Server
 # Author: Sravanti Kanchi
 
 After=network.target
+ConditionPathExists=/tmp/.env_ready
 
 [Service]
 Type=simple
