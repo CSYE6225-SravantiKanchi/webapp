@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "project_id"   {
+variable "project_id" {
   description = "Google Cloud project ID"
 }
 
@@ -56,7 +56,7 @@ variable "DB_USER" {
 }
 
 source "googlecompute" "centos-example" {
-  project_id          = var.project_id
+  project_id          = var.project_i
   source_image_family = var.source_image_family
   image_name          = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                = var.zone
