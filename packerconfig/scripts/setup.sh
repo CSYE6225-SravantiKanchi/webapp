@@ -8,12 +8,12 @@ sudo dnf update -y
 sudo dnf install -y unzip
 
 # Setting up the database
-sudo dnf install -y mysql-server
-sudo systemctl start mysqld.service
-sudo systemctl enable mysqld.service
+# sudo dnf install -y mysql-server
+# sudo systemctl start mysqld.service
+# sudo systemctl enable mysqld.service
 
-sudo echo $DB_PASSWORD
-mysqladmin -u $DB_USER password $DB_PASSWORD
+# sudo echo $DB_PASSWORD
+# mysqladmin -u $DB_USER password $DB_PASSWORD
 
 
 #node v18.X setup
