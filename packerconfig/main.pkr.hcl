@@ -63,6 +63,7 @@ source "googlecompute" "centos-example" {
   disk_size           = var.disk_size
   disk_type           = var.disk_type
   image_family        = var.image_family
+  machine_type        = "e2-medium"
   network             = var.network
   ssh_username        = var.ssh_username
 }
