@@ -70,6 +70,6 @@ exports.logger = winston.createLogger({
         level: 'debug' 
     }),
     new winston.transports.File({
-        filename:  process.env.NODE_ENV === 'dev' ? './request.log' : './var/log/webapp/requests.log', // Specify your log file path here
+        filename: process.env.PORT === 'test' ? './requests.log' : '/var/log/webapp/requests.log',
       }),  ],
 });
