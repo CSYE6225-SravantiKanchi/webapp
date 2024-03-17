@@ -4,7 +4,7 @@ set -e
 #creating a folder where we need unzip the webapp
 sudo mkdir /home/csye6225/webapp
 sudo mkdir -p /var/log/webapp
-sudo chown csaye6225:csye6225 /var/log/webapp
+sudo chown csye6225:csye6225 /var/log/webapp
 
 #unzipping the zip file
 sudo unzip /tmp/webapp_main.zip -d /home/csye6225/webapp
