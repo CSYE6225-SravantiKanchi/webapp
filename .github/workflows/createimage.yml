@@ -41,7 +41,7 @@ jobs:
         run: |
           touch .env
           echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "NODE_ENV=production" >> .env
                 
       - name: Zip the application
         run: |
