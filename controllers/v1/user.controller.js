@@ -47,7 +47,7 @@ exports.read = async (req, res, next) => {
     logger.info('User info has been fetched with the following params!', data);
     return res.status(httpStatus.OK).json({ ...data });
     }
-    logger.error('Bad Request!', req.data);
+    logger.error('Bad Request!', data);
     return res.status(httpStatus.BAD_REQUEST).json().send();
   } catch (err) {
     logger.error('Service Unavailable!', err);
