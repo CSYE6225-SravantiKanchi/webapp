@@ -27,10 +27,7 @@ exports.create = async (req, res, next) => {
     const params = pick(req.body, ['first_name', 'last_name', 'username','password']);
     await hashPassword(params);
     const user = await User.create(params);
-    
-    console.log("This will log to the console if this code is executed.");
-
-    logger.info('User has been created with the following params!', omit(user.dataValues, ['password']));
+    logger.info('User has been created with the following params!', user.dataValues);
     return res.status(httpStatus.CREATED).json(omit(user.dataValues, ['password'])).send();
   } catch (err) {
     logger.error('There is an internal server error while processing', err);

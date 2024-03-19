@@ -2,6 +2,14 @@ const winston = require('winston');
 const expressWinston = require('express-winston');
 const _ = require('lodash');
 
+const levelToSeverityMap = {
+  error: 'ERROR',
+  warn: 'WARNING',
+  info: 'INFO',
+  debug: 'DEBUG',
+  silly: 'DEFAULT'
+};
+
 const commonLogInfoFormatter = winston.format((info, options) => {
   const topLevelKeysToRemapWhenPresent = [
     'level', 'timestamp', 'message', 'line', 'file', 'threadID',
@@ -9,12 +17,12 @@ const commonLogInfoFormatter = winston.format((info, options) => {
 
   const logInfoToNest = _.chain(info)
     .pick(topLevelKeysToRemapWhenPresent)
-    .merge({ type: options.type })
+    .merge({ type: options.type,
+      severity: levelToSeverityMap[info.level]
+     })
     .value();
-  return _.chain(info)
-    .merge({ log: logInfoToNest })
-    .omit(topLevelKeysToRemapWhenPresent)
-    .value();
+
+  return _.merge(info, logInfoToNest);
 });
 
 
@@ -24,19 +32,19 @@ const middlewareRequestResponseFormatter = winston.format((info) => {
       {
         req: _.get(info, 'meta.req'),
         res: _.get(info, 'meta.res'),
+        severity: levelToSeverityMap[info.level]
       },
     )
     .omit([
       'meta',
-      'req.headers.authorization',
-      'req.headers.cookie',
-      'req.headers["x-auth-token"]',
-      'req.headers["x-consumer-profile"]',
+      'req.headers',
+      'req.httpVersion',
+      'req.body.password',
     ])
     .value();
 });
 
-/* middleware logs */
+/* middleware (req/response) logs */
 
 exports.middlewareLogger = expressWinston.logger({
   format: winston.format.combine(
@@ -45,12 +53,10 @@ exports.middlewareLogger = expressWinston.logger({
     winston.format.json(),
   ),
   transports: [
-    new winston.transports.Console({
-        level: 'debug' 
-    }),
+    new winston.transports.Console(),
     new winston.transports.File({
-        filename: './requests.log', // Specify your log file path here
-      }),
+      filename: process.env.NODE_ENV === 'test' ? './requests.log' : '/var/log/webapp/requests.log',
+    }),
   ],
   expressFormat: true,
   requestWhitelist: [...expressWinston.requestWhitelist, 'body'],
@@ -62,13 +68,15 @@ exports.middlewareLogger = expressWinston.logger({
 exports.logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
-    // commonLogInfoFormatter({ type: 'app' }),
+    commonLogInfoFormatter({ type: 'csye6225' }),
+    winston.format((info) => {
+      delete info.password;
+      return info;
+  })(),
     winston.format.json(),
   ),
   transports: [
-    new winston.transports.Console({
-        level: 'debug' 
-    }),
+    new winston.transports.Console(),
     new winston.transports.File({
         filename: process.env.NODE_ENV === 'test' ? './requests.log' : '/var/log/webapp/requests.log',
       }),  ],
