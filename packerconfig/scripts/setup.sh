@@ -2,11 +2,12 @@
 set -e
 
 #Making the libraries Upto Date
-#sudo dnf update -y
+sudo dnf update -y
 
 #install unzip
 sudo dnf install -y unzip
 
+#installing ops-agent
 curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
 sudo bash add-google-cloud-ops-agent-repo.sh --also-install
 

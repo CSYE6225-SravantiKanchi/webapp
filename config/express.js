@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 
 // for prod add it to file else just log
-//app.use(middlewareLogger);
+app.use(middlewareLogger);
 
 //setting the required headers
 app.use(customHeader);
