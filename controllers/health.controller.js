@@ -9,7 +9,7 @@ const health = async (req, res) => {
         //to check if the sql is connected
         await sequelize.authenticate();
       } catch (error) {
-        logger.error('There is an internal server error while processing', err);
+        logger.error('There is an internal server error while processing', error);
         res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
       }
     
