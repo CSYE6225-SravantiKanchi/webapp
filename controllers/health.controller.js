@@ -10,11 +10,11 @@ const health = async (req, res) => {
         await sequelize.authenticate();
       } catch (error) {
         logger.error('There is an internal server error while processing', error);
-        res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
+        return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
       }
-    
+
     logger.info('Database is connected!');
-    res.status(httpStatus.OK).json().send();
+    return res.status(httpStatus.OK).json().send();
 }
 
 exports.healthController = health;
