@@ -32,7 +32,8 @@ const middlewareRequestResponseFormatter = winston.format((info) => {
       {
         req: _.get(info, 'meta.req'),
         res: _.get(info, 'meta.res'),
-        severity: levelToSeverityMap[info.level]
+        severity: levelToSeverityMap[info.level],
+        type: 'csye6225'
       },
     )
     .omit([
@@ -61,6 +62,7 @@ exports.middlewareLogger = expressWinston.logger({
   expressFormat: true,
   requestWhitelist: [...expressWinston.requestWhitelist, 'body'],
   responseWhitelist: [...expressWinston.responseWhitelist, 'body'],
+  statusLevels: true,
 });
 
 /* Application Logger */

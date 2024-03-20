@@ -21,13 +21,13 @@ const handler = async (req, res, next) => {
         const [userName, password] = credentials.split(':');
         const {statusCode, data} = await getUserInfo({ username: userName, password});
         if (isEmpty(data)) {
-            logger.error('Unauthorized!');
+            logger.warn('Unauthorized!');
             return res.status(statusCode).json();
         }
         req.data = data;
         next();
     } catch (err) {
-        logger.error('Unauthorized!');
+        logger.error('there was an internal server error', err);
         return res.status(httpStatus.UNAUTHORIZED).json();
     }
 };
