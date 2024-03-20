@@ -21,7 +21,7 @@ exports.create = async (req, res, next) => {
     const {data} = await getUserInfo({ username: req.body.username});
 
     if(!isEmpty(data)){
-      logger.error('Bad Request for the following Data!', omit(data, ['password']));
+      logger.warn('User Exists already!', omit(data, ['password']));
       return res.status(httpStatus.BAD_REQUEST).json().send();
     }
     const params = pick(req.body, ['first_name', 'last_name', 'username','password']);
@@ -47,10 +47,10 @@ exports.read = async (req, res, next) => {
     logger.info('User info has been fetched with the following params!', data);
     return res.status(httpStatus.OK).json({ ...data });
     }
-    logger.error('Bad Request!', data);
+    logger.warn('Bad Request!', datal);
     return res.status(httpStatus.BAD_REQUEST).json().send();
   } catch (err) {
-    logger.error('Service Unavailable!', err);
+    logger.error('Internal Server Error!', err);
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
   }
 };
@@ -70,7 +70,7 @@ exports.update = async (req, res, next) => {
       logger.info('User info has been updated with the following params!', data);
       return res.status(httpStatus.NO_CONTENT).send();
     }
-    logger.error('Bad Request!', data);
+    logger.warn('Bad Request!', data);
     return res.status(httpStatus.BAD_REQUEST).json().send();
   } catch (err) {
     logger.error('Internal server error!', err);
