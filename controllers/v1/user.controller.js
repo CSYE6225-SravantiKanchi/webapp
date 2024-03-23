@@ -5,7 +5,7 @@ const { getUserInfo } = require('../../utils/user.util')
 const bcrypt = require('bcrypt');
 const { logger } = require('../../config/logger');
 const { publishMessage } = require('../../utils/pubsub.util');
-const { domain, port, expiry } = require('../../config/vars');
+const { domain, port, expiry, env } = require('../../config/vars');
 const moment = require('moment');
 
 
@@ -42,11 +42,13 @@ exports.create = async (req, res, next) => {
     const params = pick(req.body, ['first_name', 'last_name', 'username','password']);
     await hashPassword(params);
     const user = await User.create(params);
+    if(env!=='test') {
     await publishMessage({
        from: `mailgun@${domain}`, 
        to: user.username, 
        verificationLink: generateVerificationLink(user.username, user.verification_token)
      });
+    }
     logger.info('User has been created with the following params!', user.dataValues);
     return res.status(httpStatus.CREATED).json(omit(user.dataValues, ['password'])).send();
   } catch (err) {
@@ -108,7 +110,7 @@ exports.verify = async (req, res, next) => {
 
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
-    
+ 
     if (!isEmpty(data) && getTimeDifferenceInMinutes(data.createdAt)) {
       await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
