@@ -24,9 +24,9 @@ describe("User Tests", () => {
     
         expect(createRes.statusCode).toBe(httpStatus.CREATED);
     
-       const response =  await request(app)
+        await request(app)
                 .get(`/v1/user/randomLast@example.com/${createRes.body.verification_token}/verification`)
-                .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
+                .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));     
         const getRes = await request(app)
                 .get("/v1/user/self")
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
