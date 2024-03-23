@@ -13,5 +13,9 @@ module.exports = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
   sqlUri: process.env.SQL_URI,
-  database: process.env.DATABASE
+  database: process.env.DATABASE,
+  topic: process.env.TOPIC,
+  domain: process.env.DOMAIN,
+  projectId: process.env.PROJECTID,
+  expiry: parseInt(process.env.EXPIRY),
 };
