@@ -12,7 +12,7 @@ const moment = require('moment');
 //time difference
 const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
  const value =  Math.abs(moment(date1).diff(moment(date2), 'minutes'));
- console.log(date1, date2);
+ console.log(date1, date2, expiry);
  return value <= expiry
 }
 
@@ -113,7 +113,7 @@ exports.verify = async (req, res, next) => {
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
      console.log(data, emailId, tokenId)
-    if (!isEmpty(data) && getTimeDifferenceInMinutes(data.createdAt)) {
+    if (!isEmpty(data) && getTimeDifferenceInMinutes(data.account_created)) {
       await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
     }
