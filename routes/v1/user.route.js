@@ -80,7 +80,7 @@ router
    *
    * @apiSuccess {Object} User
    */
-  .post(validate(verify), authorize, controller.verify).
+  .get(validate(verify), controller.verify).
   all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());
 
 module.exports = router;

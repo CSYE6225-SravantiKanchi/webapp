@@ -108,9 +108,9 @@ exports.verify = async (req, res, next) => {
 
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
-
+    
     if (!isEmpty(data) && getTimeDifferenceInMinutes(data.createdAt)) {
-      await User.update({isVerified: true}, { where: { username: data.username } });
+      await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
     }
     return res.status(httpStatus.UNAUTHORIZED).json().send();
