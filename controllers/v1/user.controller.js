@@ -12,7 +12,7 @@ const moment = require('moment');
 //time difference
 const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
  const value =  Math.abs(moment(date1).diff(moment(date2), 'minutes'));
- console.log(date1, date2, expiry);
+ console.log(date1, date2,value, expiry);
  return value <= expiry
 }
 
