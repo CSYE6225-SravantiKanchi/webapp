@@ -48,7 +48,8 @@ exports.create = async (req, res, next) => {
     await publishMessage({
        from: `mailgun@${domain}`, 
        to: user.username, 
-       verificationLink: generateVerificationLink(user.username, user.verification_token)
+       verificationLink: generateVerificationLink(user.username, user.verification_token),
+       domain
      });
     }
     logger.info('User has been created with the following params!', user.dataValues);

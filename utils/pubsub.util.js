@@ -1,14 +1,13 @@
 const { PubSub } = require('@google-cloud/pubsub');
-const  { topic, projectId } = require('../config/vars');
+const  { topic } = require('../config/vars');
 const { logger } = require('../config/logger');
 
-const pubsub = new PubSub({projectId});
+const pubsub = new PubSub();
 
 
 // Publish the message to the topic
 exports.publishMessage = async (messageData) => {
   try {
-    console.log(topic);
     const dataBuffer = Buffer.from(JSON.stringify(messageData));
     const messageId = await pubsub.topic(topic).publish(dataBuffer);
     logger.info(`Message ${messageId} published to topic ${topic}`);
