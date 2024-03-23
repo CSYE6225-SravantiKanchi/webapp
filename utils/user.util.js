@@ -4,7 +4,7 @@ const { isEmpty, omit } = require('lodash');
 
 const getUserInfo = async (params) => {
     try{
-    const user = await User.findOne({ where: { username: params.username } });
+    const user = await User.findOne({ where: params });
     if(isEmpty(user)){
         return { statusCode: httpStatus.UNAUTHORIZED }
     }
