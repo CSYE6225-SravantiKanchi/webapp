@@ -110,7 +110,7 @@ exports.verify = async (req, res, next) => {
 
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
- 
+     console.log(data, emailId, tokenId)
     if (!isEmpty(data) && getTimeDifferenceInMinutes(data.createdAt)) {
       await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
