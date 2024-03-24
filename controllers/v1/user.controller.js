@@ -48,10 +48,10 @@ exports.create = async (req, res, next) => {
 
     if(env!=='test' && data.is_verified === false ) {
      
-    await User.update({mail_sent : moment(), link_count: data.link_count +1 });
+    await User.update({mail_sent : moment(), link_count: data.link_count +1 },{ where: { username: data.username } });
     await publishMessage({
        from: `mailgun@${domain}`, 
-       to: user.username, 
+       to: data.username, 
        verificationLink: generateVerificationLink(data.username, data.verification_token),
        domain
      });
