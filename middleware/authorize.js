@@ -11,7 +11,7 @@ const { logger } = require('../config/logger');
 const handler = async (req, res, next) => {
 
     if (isEmpty(req.headers.authorization)) {
-        logger.error('Unauthorized!');
+        logger.warn('Unauthorized!');
         return res.status(httpStatus.UNAUTHORIZED).json();
     }
 
@@ -27,14 +27,14 @@ const handler = async (req, res, next) => {
         req.data = data;
         next();
     } catch (err) {
-        logger.error('there was an internal server error', err);
+        logger.warn('there was an internal server error', err);
         return res.status(httpStatus.UNAUTHORIZED).json();
     }
 };
 
 const authNotRequired = async ( req,res, next) => {
     if (!isEmpty(req.headers.authorization)) {
-        logger.error('Authorization not required!');
+        logger.warn('Authorization not required!');
         return res.status(httpStatus.BAD_REQUEST).json();
     }
     next();

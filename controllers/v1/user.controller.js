@@ -35,25 +35,29 @@ const hashPassword = async (params) => {
  */
 exports.create = async (req, res, next) => {
   try {
-    const {data} = await getUserInfo({ username: req.body.username});
+    let { data } = await getUserInfo({ username: req.body.username});
 
-    if(!isEmpty(data)){
+    if(!isEmpty(data) && data.is_verified){
       logger.warn('User Exists already!', omit(data, ['password']));
       return res.status(httpStatus.BAD_REQUEST).json().send();
-    }
+    } else if(isEmpty(data)) {
     const params = pick(req.body, ['first_name', 'last_name', 'username','password']);
     await hashPassword(params);
-    const user = await User.create(params);
-    if(env!=='test') {
+    data = await User.create(params);
+    }
+
+    if(env!=='test' && data.is_verified === false ) {
+     
+    await User.update({mail_sent : moment(), link_count: data.link_count +1 });
     await publishMessage({
        from: `mailgun@${domain}`, 
        to: user.username, 
-       verificationLink: generateVerificationLink(user.username, user.verification_token),
+       verificationLink: generateVerificationLink(data.username, data.verification_token),
        domain
      });
     }
-    logger.info('User has been created with the following params!', user.dataValues);
-    return res.status(httpStatus.CREATED).json(omit(user.dataValues, ['password'])).send();
+    logger.info('User has been created with the following params!', data.dataValues);
+    return res.status(httpStatus.CREATED).json(omit(data.dataValues, ['password'])).send();
   } catch (err) {
     logger.error('There is an internal server error while processing', err);
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
@@ -113,7 +117,7 @@ exports.verify = async (req, res, next) => {
 
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
-    if (!isEmpty(data) && getTimeDifferenceInMinutes(data.account_created)) {
+    if (!isEmpty(data) && getTimeDifferenceInMinutes(data.mailVerification)) {
       await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
     }
