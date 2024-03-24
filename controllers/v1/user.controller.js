@@ -35,34 +35,40 @@ const hashPassword = async (params) => {
  */
 exports.create = async (req, res, next) => {
   try {
-    let { data } = await getUserInfo({ username: req.body.username});
+    // Check if user already exists
+    let userInfo = await getUserInfo({ username: req.body.username });
 
-    if(!isEmpty(data) && data.is_verified){
-      logger.warn('User Exists already!', omit(data, ['password']));
-      return res.status(httpStatus.BAD_REQUEST).json().send();
-    } else if(isEmpty(data)) {
-    const params = pick(req.body, ['first_name', 'last_name', 'username','password']);
-    await hashPassword(params);
-    data = await User.create(params);
+    if (!isEmpty(userInfo.data) && userInfo.data.is_verified) {
+      logger.warn('User already exists!', omit(userInfo.data, ['password']));
+      return res.status(httpStatus.BAD_REQUEST).send();
     }
 
-    if(env!=='test' && data.is_verified === false ) {
-     
-    await User.update({mail_sent : moment(), link_count: data.link_count +1 },{ where: { username: data.username } });
-    await publishMessage({
-       from: `mailgun@${domain}`, 
-       to: data.username, 
-       verificationLink: generateVerificationLink(data.username, data.verification_token),
-       domain
-     });
+    // If user doesn't exist, create a new user
+    if (isEmpty(userInfo.data)) {
+      const userData = pick(req.body, ['first_name', 'last_name', 'username', 'password']);
+      await hashPassword(userData);
+      userInfo.data = (await User.create(userData)).dataValues;
     }
-    logger.info('User has been created with the following params!', data.dataValues);
-    return res.status(httpStatus.CREATED).json(omit(data.dataValues, ['password'])).send();
+
+    // If user is not verified and verification link has expired, send verification email
+    if (env !== 'test' && !userInfo.data.is_verified && !getTimeDifferenceInMinutes(userInfo.data.mail_sent)) {
+      await User.update({ mail_sent: moment(), link_count: userInfo.data.link_count + 1 }, { where: { username: userInfo.data.username } });
+      await publishMessage({
+        from: `mailgun@${domain}`,
+        to: userInfo.data.username,
+        verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
+        domain
+      });
+    }
+
+    logger.info('User has been created with the following params:', userInfo.data);
+    return res.status(httpStatus.CREATED).json(omit(userInfo.data, ['password']));
   } catch (err) {
-    logger.error('There is an internal server error while processing', err);
-    return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
+    logger.error('Internal server error occurred while processing:', err);
+    return res.status(httpStatus.SERVICE_UNAVAILABLE).send();
   }
 };
+
 
 /**
  * read User
