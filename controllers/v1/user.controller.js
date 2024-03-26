@@ -50,13 +50,14 @@ exports.create = async (req, res, next) => {
       userInfo.data = (await User.create(userData)).dataValues;
     }
 
+    if(env!=='test') {
     await publishMessage({
         from: `mailgun@${domain}`,
         to: userInfo.data.username,
         verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
         domain
       });
-
+    }
     logger.info('User has been created with the following params:', userInfo.data);
     return res.status(httpStatus.CREATED).json(omit(userInfo.data, ['password']));
   } catch (err) {
@@ -121,19 +122,23 @@ exports.verify = async (req, res, next) => {
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
     const mailData = await MailTracking.findOne({ where: {email : emailId}});
 
-    if (!isEmpty(data) && getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
-      await User.update({is_verified: true}, { where: { username: data.username } });
-      return res.status(httpStatus.OK).send();
-    }
-    
-    await publishMessage({
-      from: `mailgun@${domain}`,
-      to: userInfo.data.username,
-      verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
-      domain
-    });
-
+    if (!isEmpty(data)) {
+      if(getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
+          await User.update({is_verified: true}, { where: { username: data.username } });
+          return res.status(httpStatus.OK).send();
+      } else {
+        await publishMessage({
+          from: `mailgun@${domain}`,
+          to: userInfo.data.username,
+          verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
+          domain
+       });
+      }
     return res.status(httpStatus.UNAUTHORIZED).json({ message: 'The link has expired, and generated a new link!'}).send();
+    }
+
+    return res.status(httpStatus.UNAUTHORIZED).json({ message: 'The link has expired'}).send();
+
   } catch (err) {
     logger.error('Internal server error!', err);
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
