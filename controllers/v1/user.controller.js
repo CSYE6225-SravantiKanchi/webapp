@@ -11,7 +11,7 @@ const moment = require('moment');
 
 //time difference
 const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
- const value =  Math.abs(moment(date1).diff(moment(date2), 'minutes'), true);
+ const value =  Math.abs(moment(date1).diff(moment(date2), 'minutes', true));
  console.log(value, expiry);
  return value <= expiry
 }
@@ -129,8 +129,8 @@ exports.verify = async (req, res, next) => {
       } else {
         await publishMessage({
           from: `mailgun@${domain}`,
-          to: userInfo.data.username,
-          verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
+          to: emailId,
+          verificationLink: generateVerificationLink(data.username, data.verification_token),
           domain
        });
       }
