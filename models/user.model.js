@@ -19,14 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mail_sent: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
-      link_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-      },
+
       is_verified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
