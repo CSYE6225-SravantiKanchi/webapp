@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const { pick, omit, isEmpty } = require('lodash');
-const { user: User } = require('../../models');
+const { user: User, MailTracking } = require('../../models');
 const { getUserInfo } = require('../../utils/user.util')
 const bcrypt = require('bcrypt');
 const { logger } = require('../../config/logger');
@@ -38,7 +38,7 @@ exports.create = async (req, res, next) => {
     // Check if user already exists
     let userInfo = await getUserInfo({ username: req.body.username });
 
-    if (!isEmpty(userInfo.data) && userInfo.data.is_verified) {
+    if (!isEmpty(userInfo.data)) {
       logger.warn('User already exists!', omit(userInfo.data, ['password']));
       return res.status(httpStatus.BAD_REQUEST).send();
     }
@@ -50,16 +50,12 @@ exports.create = async (req, res, next) => {
       userInfo.data = (await User.create(userData)).dataValues;
     }
 
-    // If user is not verified and verification link has expired, send verification email
-    if (env !== 'test' && !userInfo.data.is_verified && !getTimeDifferenceInMinutes(userInfo.data.mail_sent)) {
-      await User.update({ mail_sent: moment(), link_count: userInfo.data.link_count + 1 }, { where: { username: userInfo.data.username } });
-      await publishMessage({
+    await publishMessage({
         from: `mailgun@${domain}`,
         to: userInfo.data.username,
         verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
         domain
       });
-    }
 
     logger.info('User has been created with the following params:', userInfo.data);
     return res.status(httpStatus.CREATED).json(omit(userInfo.data, ['password']));
@@ -123,11 +119,21 @@ exports.verify = async (req, res, next) => {
 
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
-    if (!isEmpty(data) && getTimeDifferenceInMinutes(data.mailVerification)) {
+    const mailData = await MailTracking.findOne({ where: {email : emailId}});
+
+    if (!isEmpty(data) && getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
       await User.update({is_verified: true}, { where: { username: data.username } });
       return res.status(httpStatus.OK).send();
     }
-    return res.status(httpStatus.UNAUTHORIZED).json().send();
+    
+    await publishMessage({
+      from: `mailgun@${domain}`,
+      to: userInfo.data.username,
+      verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
+      domain
+    });
+
+    return res.status(httpStatus.UNAUTHORIZED).json({ message: 'The link has expired, and generated a new link!'}).send();
   } catch (err) {
     logger.error('Internal server error!', err);
     return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
