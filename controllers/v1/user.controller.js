@@ -121,7 +121,7 @@ exports.verify = async (req, res, next) => {
     const { emailId, tokenId } = req.params;
     const { data } = await getUserInfo({ username: emailId, verification_token: tokenId, is_verified: false });
     const mailData = await MailTracking.findOne({ where: {email : emailId}});
-
+   
     if (!isEmpty(data)) {
       if(getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
           await User.update({is_verified: true}, { where: { username: data.username } });
