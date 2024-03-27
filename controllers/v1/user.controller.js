@@ -7,7 +7,7 @@ const { logger } = require('../../config/logger');
 const { publishMessage } = require('../../utils/pubsub.util');
 const { domain, port, expiry, env } = require('../../config/vars');
 const moment = require('moment');
-
+const { v4 : uuidv4 } = require('uuid');
 
 //time difference
 const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
@@ -55,7 +55,8 @@ exports.create = async (req, res, next) => {
         from: `mailgun@${domain}`,
         to: userInfo.data.username,
         verificationLink: generateVerificationLink(userInfo.data.username, userInfo.data.verification_token),
-        domain
+        domain,
+        name: userInfo.data.first_name,
       });
     }
     logger.info('User has been created with the following params:', userInfo.data);
@@ -124,13 +125,15 @@ exports.verify = async (req, res, next) => {
    
     if (!isEmpty(data)) {
       if(getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
-          await User.update({is_verified: true}, { where: { username: data.username } });
-          return res.status(httpStatus.OK).send();
+          await User.update({is_verified: true, verified_at: new moment()}, { where: { username: data.username } });
+          return res.status(httpStatus.OK).send({ message: 'Your email has een Verified!'});
       } else {
+        const newToken = uuidv4();
+        await User.update({verification_token: newToken}, { where: { username: data.username } });
         await publishMessage({
           from: `mailgun@${domain}`,
           to: emailId,
-          verificationLink: generateVerificationLink(data.username, data.verification_token),
+          verificationLink: generateVerificationLink(data.username, newToken),
           domain
        });
       }
