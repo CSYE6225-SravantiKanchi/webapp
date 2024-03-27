@@ -124,7 +124,8 @@ exports.verify = async (req, res, next) => {
     const mailData = await MailTracking.findOne({ where: {email : emailId}});
    
     if (!isEmpty(data)) {
-      if(getTimeDifferenceInMinutes(mailData.dataValues.mail_sent)) {
+      // for say the mail_sent exists we compare with that, otherwise we wll assume that the link has been verified even prior the mail_sent is updated in Database. So, we will take the time stamp.
+      if(getTimeDifferenceInMinutes(mailData.dataValues.mail_sent || new moment())) {
           await User.update({is_verified: true, verified_at: new moment()}, { where: { username: data.username } });
           return res.status(httpStatus.OK).send({ message: 'Your email has een Verified!'});
       } else {
@@ -134,7 +135,8 @@ exports.verify = async (req, res, next) => {
           from: `mailgun@${domain}`,
           to: emailId,
           verificationLink: generateVerificationLink(data.username, newToken),
-          domain
+          domain,
+          name: data.first_name
        });
       }
     return res.status(httpStatus.UNAUTHORIZED).json({ message: 'The link has expired, and generated a new link!'}).send();
