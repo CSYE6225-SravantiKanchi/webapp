@@ -12,7 +12,7 @@ const { v4 : uuidv4 } = require('uuid');
 //time difference
 const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
  const value =  Math.abs(moment(date1).diff(moment(date2), 'minutes', true));
- console.log(value, expiry);
+ logger.info("minutes difference" , value );
  return value <= expiry
 }
 
