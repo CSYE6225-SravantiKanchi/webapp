@@ -19,11 +19,16 @@ const handler = async (req, res, next) => {
         const basicAuth = req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(basicAuth, 'base64').toString('utf-8');
         const [userName, password] = credentials.split(':');
-        const { statusCode, data } = await getUserInfo({ username: userName, password, is_verified: true});
+        const { statusCode, data } = await getUserInfo({ username: userName, password});
         if (isEmpty(data)) {
             logger.warn('Unauthorized!');
             return res.status(statusCode).json();
         }
+
+        if(!data.is_verified) {
+            return res.status(httpStatus.FORBIDDEN).json();
+        }
+        
         req.data = data;
         next();
     } catch (err) {
