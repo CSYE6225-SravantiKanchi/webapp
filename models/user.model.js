@@ -19,6 +19,19 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+
+      is_verified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      verification_token: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4       
+      },
+      verified_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
       username: {
         type: Sequelize.STRING,
         allowNull: false,

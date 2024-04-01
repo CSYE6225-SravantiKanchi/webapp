@@ -14,6 +14,10 @@ jobs:
       NODE_ENV: ${{ secrets.NODE_ENV }}
       PKR_VAR_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       PKR_VAR_DB_USER: ${{ secrets.DB_USER }}
+      TOPIC: ${{ secrets.TOPIC }}
+      DOMAIN: ${{ secrets.DOMAIN }}
+      EXPIRY: ${{ secrets.EXPIRY}}
+
     steps:
 
       - name: Checkout code
@@ -42,6 +46,9 @@ jobs:
           touch .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "NODE_ENV=production" >> .env
+          echo "TOPIC=${{ secrets.TOPIC }}" >> .env
+          echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
+          echo "EXPIRY=${{ secrets.EXPIRY}}" >> .env
                 
       - name: Zip the application
         run: |

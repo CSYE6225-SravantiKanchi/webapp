@@ -12,6 +12,9 @@ jobs:
       SQL_URI: ${{ secrets.SQL_URI }}
       DATABASE: ${{ secrets.DATABASE }}
       NODE_ENV: ${{ secrets.NODE_ENV }}
+      TOPIC: ${{ secrets.TOPIC }}
+      DOMAIN: ${{ secrets.DOMAIN }}
+      EXPIRY: ${{ secrets.EXPIRY}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

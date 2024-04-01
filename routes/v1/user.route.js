@@ -9,6 +9,7 @@ const router = express.Router();
 const {
   create,
   update,
+  verify
 } = require('../../validations/v1/user.validation');
 
 
@@ -63,6 +64,23 @@ router
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
    */
   .put(validate(update), authorize, controller.update).
+  all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());
+
+router
+  .route('/:emailId/:tokenId/verification')
+  /**
+   * @api {post} v1/user/verification add feature validate user email
+   * @apiDescription to create users
+   * @apiVersion 1.0.0
+   * @apiName create
+   * @apiGroup User
+   * @apiPermission public
+   *
+   * @apiHeader {String} Authorization  No Authorization
+   *
+   * @apiSuccess {Object} User
+   */
+  .get(validate(verify), controller.verify).
   all((req, res, next) => res.status(httpStatus.METHOD_NOT_ALLOWED).json().send());
 
 module.exports = router;

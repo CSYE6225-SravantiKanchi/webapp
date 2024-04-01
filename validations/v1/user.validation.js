@@ -21,4 +21,12 @@ module.exports = {
       password: Joi.string(),
     }).or('first_name', 'last_name', 'password').unknown(false),
   },
+
+    // POST /verify/
+    verify: {
+      [Segments.PARAMS]:  Joi.object().keys({
+        emailId: Joi.string(),
+        tokenId: Joi.string(),
+      }).unknown(false),
+    },
 };
