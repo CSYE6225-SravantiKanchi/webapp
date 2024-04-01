@@ -12,7 +12,7 @@ const health = async (req, res) => {
         logger.error('There is an internal server error while processing', error);
         return res.status(httpStatus.SERVICE_UNAVAILABLE).json().send();
       }
-    
+
     logger.info('Database is connected!');
     return res.status(httpStatus.OK).json().send();
 }

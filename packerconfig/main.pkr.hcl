@@ -55,6 +55,11 @@ variable "DB_USER" {
   default     = "test"
 }
 
+variable "machine_type" {
+  description = "The username for SSH access"
+  default     = "e2-medium"
+}
+
 source "googlecompute" "centos-example" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
@@ -63,7 +68,7 @@ source "googlecompute" "centos-example" {
   disk_size           = var.disk_size
   disk_type           = var.disk_type
   image_family        = var.image_family
-  machine_type        = "e2-medium"
+  machine_type        = var.machine_type
   network             = var.network
   ssh_username        = var.ssh_username
 }
