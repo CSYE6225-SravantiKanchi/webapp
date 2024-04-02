@@ -18,7 +18,7 @@ const getTimeDifferenceInMinutes = (date1, date2=moment()) => {
 
 //verification link
 const generateVerificationLink = (email, verification_token) => {
-  return `http://${domain}:${port}/v1/user/${email}/${verification_token}/verification`;
+  return `https://${domain}/v1/user/${email}/${verification_token}/verification`;
 }
 
 //hashing password
