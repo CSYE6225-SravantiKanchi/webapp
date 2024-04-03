@@ -4,6 +4,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      expiry_time: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
       email: {
         type: Sequelize.STRING,
         primaryKey: true,
