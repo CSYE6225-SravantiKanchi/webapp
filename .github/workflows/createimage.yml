@@ -84,4 +84,5 @@ jobs:
         run: packer init ./packerconfig/main.pkr.hcl
 
       - name: Building the Image
-        run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl      
+        run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
+        
