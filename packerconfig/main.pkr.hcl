@@ -62,7 +62,7 @@ variable "machine_type" {
 
 source "googlecompute" "centos-example" {
   project_id          = var.project_id
-  source_image_family = var.source_image_family
+  source_image        = "centos-stream-8-v20240110"
   image_name          = "csye6225-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                = var.zone
   disk_size           = var.disk_size
