@@ -63,13 +63,15 @@ jobs:
 
       - name: 'Configure MIG to use new template'
         run: |
+
+        
           gcloud compute instance-groups managed set-instance-template ${{ env.MIG_NAME }} \
-            --template=${{ env.TEMPLATE_NAME }} \
+            --template= projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.TEMPLATE_NAME }} \
             --region=${{ env.REGION }}
 
       - name: 'Start rolling update'
         run: |
           gcloud compute instance-groups managed rolling-action start-update ${{ env.MIG_NAME }} \
-            --version template=${{ env.TEMPLATE_NAME }} \
+            --template= projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.TEMPLATE_NAME }} \
             --region=${{ env.REGION }} \
             --type=proactive
