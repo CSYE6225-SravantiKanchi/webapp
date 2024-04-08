@@ -22,6 +22,7 @@ jobs:
       DB_HOST: 10.12.0.4
       DB_PORT: 3306
       DB_NAME: webapp
+      REGION: us-east1
 
     steps:
       - name: Checkout code
@@ -46,6 +47,8 @@ jobs:
             --machine-type=${{ env.MACHINE_TYPE }} \
             --tags=${{ env.TAGS }} \
             --image=${{ env.IMAGE }} \
+            --region=${{ env.REGION }} \
+            --instance-template-region=${{ env.REGION }} \
             --boot-disk-size=${{ env.BOOT_DISK_SIZE }} \
             --boot-disk-type=${{ env.BOOT_DISK_TYPE }} \
             --network-interface="network=${{ env.NETWORK }},subnet=${{ env.SUBNET }},network-tier=${{ env.NETWORK_TIER }}" \
