@@ -6,6 +6,22 @@ jobs:
   build:
     name: Create a machine image
     runs-on: ubuntu-latest
+    env: # Define environment variables for the entire job
+      MACHINE_TYPE: e2-medium
+      TAGS: webapp
+      IMAGE: csye6225-2024-04-03-14-05-03
+      BOOT_DISK_SIZE: 100GB
+      BOOT_DISK_TYPE: pd-balanced
+      NETWORK: cloud-vpc
+      SUBNET: webapp
+      NETWORK_TIER: PREMIUM
+      SERVICE_ACCOUNT: webapp-service-account@cloud-assigment-4.iam.gserviceaccount.com
+      SCOPES: "https://www.googleapis.com/auth/cloud-platform"
+      DB_USER: webapp
+      DB_PASSWORD: hcK446dmHNmdQuNM
+      DB_HOST: 10.12.0.4
+      DB_PORT: 3306
+      DB_NAME: webapp
 
     steps:
       - name: Checkout code
@@ -27,14 +43,12 @@ jobs:
       - name: 'create instance template'
         run: |
           gcloud compute instance-templates create csye6225-vm3 \
-          --machine-type=e2-medium \
-          --tags=webapp \
-          --region=us-east1 \
-          --instance-template-region=us-east1 \
-          --image=csye6225-2024-04-03-14-05-03 \
-          --boot-disk-size=100GB \
-          --boot-disk-type=pd-balanced \
-          --network-interface="network=cloud-vpc,subnet=webapp,network-tier=PREMIUM" \
-          --service-account=webapp-service-account@cloud-assigment-4.iam.gserviceaccount.com \
-          --scopes=https://www.googleapis.com/auth/cloud-platform \
-          --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://webapp:hcK446dmHNmdQuNM@10.12.0.4:3306/" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=webapp" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
+            --machine-type=${{ env.MACHINE_TYPE }} \
+            --tags=${{ env.TAGS }} \
+            --image=${{ env.IMAGE }} \
+            --boot-disk-size=${{ env.BOOT_DISK_SIZE }} \
+            --boot-disk-type=${{ env.BOOT_DISK_TYPE }} \
+            --network-interface="network=${{ env.NETWORK }},subnet=${{ env.SUBNET }},network-tier=${{ env.NETWORK_TIER }}" \
+            --service-account=${{ env.SERVICE_ACCOUNT }} \
+            --scopes=${{ env.SCOPES }} \
+            --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_HOST }}:${{ env.DB_PORT }}/${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
