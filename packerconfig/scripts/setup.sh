@@ -1,11 +1,11 @@
 #!/bin/bash
-set -e
+#set -e
 
 sudo sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 sudo sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
 #Making the libraries Upto Date
-sudo dnf update -y || echo "Error occurred while updating packages"
+#sudo dnf update -y || echo "Error occurred while updating packages"
 
 #install unzip
 sudo dnf install -y unzip
