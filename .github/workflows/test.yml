@@ -50,7 +50,7 @@ jobs:
       - name: 'create instance template'
         run: |
           gcloud compute instance-templates create $TEMPLATE_NAME \
-            --boot-disk-kms-key projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key
+            --boot-disk-kms-key projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key \
             --machine-type=${{ env.MACHINE_TYPE }} \
             --tags=${{ env.TAGS }} \
             --image=${{ env.IMAGE }} \
