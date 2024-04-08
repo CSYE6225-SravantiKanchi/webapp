@@ -1,4 +1,4 @@
-name: image creator CI
+name: instance template creator CI
 
 on: [pull_request]
 
@@ -23,6 +23,7 @@ jobs:
       DB_PORT: 3306
       DB_NAME: webapp
       REGION: us-east1
+      MIG_NAME: appserver-igm-2
 
     steps:
       - name: Checkout code
@@ -40,10 +41,13 @@ jobs:
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
+      - name: 'Generate Template Name with Timestamp'
+        id: generate-timestamp
+        run: |
+          echo "TEMPLATE_NAME=csye6225-vm-$(date +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
+
       - name: 'create instance template'
         run: |
-          TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
-          TEMPLATE_NAME="csye6225-vm-$TIMESTAMP"
           gcloud compute instance-templates create $TEMPLATE_NAME \
             --machine-type=${{ env.MACHINE_TYPE }} \
             --tags=${{ env.TAGS }} \
@@ -56,3 +60,16 @@ jobs:
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=${{ env.SCOPES }} \
             --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_HOST }}:${{ env.DB_PORT }}/${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
+
+      - name: 'Configure MIG to use new template'
+        run: |
+          gcloud compute instance-groups managed set-instance-template ${{ env.MIG_NAME }} \
+            --template=${{ env.TEMPLATE_NAME }} \
+            --region=${{ env.REGION }}
+
+      - name: 'Start rolling update'
+        run: |
+          gcloud compute instance-groups managed rolling-action start-update ${{ env.MIG_NAME }} \
+            --version template=${{ env.TEMPLATE_NAME }} \
+            --region=${{ env.REGION }} \
+            --type=proactive
