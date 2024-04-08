@@ -1,6 +1,6 @@
 name: image creator CI
 
-on: [ push ]
+on: [ pull_request ]
 
 jobs:
   build:
@@ -85,4 +85,4 @@ jobs:
 
       - name: Building the Image
         run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
-        
+
