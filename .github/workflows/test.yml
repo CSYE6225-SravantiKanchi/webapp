@@ -23,7 +23,7 @@ jobs:
       DB_PORT: 3306
       DB_NAME: webapp
       REGION: us-east1
-      MIG_NAME: appserver-igm-2
+      MIG_NAME: appserver-igm-3
 
     steps:
       - name: Checkout code
