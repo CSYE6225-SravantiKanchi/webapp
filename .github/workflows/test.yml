@@ -7,23 +7,23 @@ jobs:
     name: Create a machine image
     runs-on: ubuntu-latest
     env: # Define environment variables for the entire job
-      MACHINE_TYPE: e2-medium
-      TAGS: webapp
+      MACHINE_TYPE: ${{ secrets.MACHINE_TYPE }}
+      TAGS: ${{ secrets.TAGS }}
       IMAGE: csye6225-2024-04-03-14-05-03
-      BOOT_DISK_SIZE: 50GB
-      BOOT_DISK_TYPE: pd-balanced
-      NETWORK: cloud-vpc
-      SUBNET: webapp
-      NETWORK_TIER: PREMIUM
-      SERVICE_ACCOUNT: webapp-service-account@cloud-assigment-4.iam.gserviceaccount.com
-      SCOPES: "https://www.googleapis.com/auth/cloud-platform"
-      DB_USER: webapp
-      DB_PASSWORD: hcK446dmHNmdQuNM
-      DB_HOST: 10.12.0.4
-      DB_PORT: 3306
-      DB_NAME: webapp
-      REGION: us-east1
-      MIG_NAME: appserver-igm-3
+      BOOT_DISK_SIZE: ${{ secrets.BOOT_DISK_SIZE }}
+      BOOT_DISK_TYPE: ${{ secrets.BOOT_DISK_TYPE }}
+      NETWORK: ${{ secrets.NETWORK }}
+      SUBNET: ${{ secrets.SUBNET }}
+      NETWORK_TIER: ${{ secrets.NETWORK_TIER }}
+      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+      SCOPES: ${{ secrets.SCOPES }}
+      PROD_DB_USER: ${{ secrets.PROD_DB_USER }}
+      PROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+      PROD_DB_HOST: ${{ secrets.PROD_DB_HOST }}
+      PROD_DB_PORT: ${{ secrets.PROD_DB_PORT }}
+      PROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
+      REGION: ${{ secrets.REGION }}
+      MIG_NAME: ${{ secrets.MIG_NAME }}
 
     steps:
       - name: Checkout code
@@ -61,7 +61,7 @@ jobs:
             --network-interface="network=${{ env.NETWORK }},subnet=${{ env.SUBNET }},network-tier=${{ env.NETWORK_TIER }}" \
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=${{ env.SCOPES }} \
-            --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_HOST }}:${{ env.DB_PORT }}/" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
+            --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.PROD_DB_USER }}:${{ env.PROD_DB_PASSWORD }}@${{ env.PROD_DB_HOST }}:${{ env.PROD_DB_PORT }}/" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.PROD_DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
 
       - name: 'Configure MIG to use new template'
         run: |
