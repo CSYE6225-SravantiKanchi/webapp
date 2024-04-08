@@ -65,8 +65,9 @@ jobs:
         run: |
 
         
-          gcloud compute instance-groups managed set-instance-template ${{ env.MIG_NAME }} \
-            --template= projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.TEMPLATE_NAME }} \
+          gcloud compute instance-groups managed set-instance-template \
+           ${{ env.MIG_NAME }} \
+            --template=projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.TEMPLATE_NAME }} \
             --region=${{ env.REGION }}
 
       - name: 'Start rolling update'
