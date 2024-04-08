@@ -61,7 +61,7 @@ jobs:
             --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=${{ env.SCOPES }} \
             --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@${{ env.DB_HOST }}:${{ env.DB_PORT }}/" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
-            --boot-disk-kms-key=projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key \
+            --boot-disk-kms-key="projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key"
 
 
 
