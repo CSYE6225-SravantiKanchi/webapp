@@ -10,7 +10,7 @@ jobs:
       MACHINE_TYPE: e2-medium
       TAGS: webapp
       IMAGE: csye6225-2024-04-03-14-05-03
-      BOOT_DISK_SIZE: 100GB
+      BOOT_DISK_SIZE: 50GB
       BOOT_DISK_TYPE: pd-balanced
       NETWORK: cloud-vpc
       SUBNET: webapp
