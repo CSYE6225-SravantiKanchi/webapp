@@ -76,3 +76,9 @@ jobs:
             --version=template=projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.TEMPLATE_NAME }} \
             --region=${{ env.REGION }} \
             --type=proactive
+
+      - name: 'Check rolling update'
+        run: |
+          gcloud compute instance-groups managed wait-until ${{ env.MIG_NAME }} \
+          --version-target-reached \
+            --region=${{ env.REGION }}
