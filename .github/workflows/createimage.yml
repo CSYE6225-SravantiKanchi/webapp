@@ -102,12 +102,8 @@ jobs:
       - name: Building the Image
         run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl
 
-      - name: Building the Image
+      - name: Fetch the Image Name
         run: |
-          packer build \
-            -var 'project_id=${{ secrets.PROJECT_ID }}' \
-            -var 'zone=${{ secrets.ZONE }}' \
-            ./packerconfig/main.pkr.hcl
           IMAGE_NAME=$(jq -r '.builds[-1].custom_data.image_name' manifest.json)
           echo "CREATED_IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
