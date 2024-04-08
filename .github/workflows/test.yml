@@ -40,10 +40,11 @@ jobs:
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
-
       - name: 'create instance template'
         run: |
-          gcloud compute instance-templates create csye6225-vm3 \
+          TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
+          TEMPLATE_NAME="csye6225-vm-$TIMESTAMP"
+          gcloud compute instance-templates create $TEMPLATE_NAME \
             --machine-type=${{ env.MACHINE_TYPE }} \
             --tags=${{ env.TAGS }} \
             --image=${{ env.IMAGE }} \
