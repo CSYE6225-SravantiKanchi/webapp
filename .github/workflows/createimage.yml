@@ -87,4 +87,6 @@ jobs:
         run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl      
 
       - name: View Image Info
-        run: cat image_manifest.json
+        run: |
+          cat image_manifest.json
+          echo "::set-output name=artifact_id::$(jq -r '.builds[0].artifact_id' image_manifest.json)"
