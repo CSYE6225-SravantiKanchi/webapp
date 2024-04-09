@@ -128,4 +128,31 @@ jobs:
               MYPROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
               MY_REGION: ${{ secrets.REGION }}  
 
+      - name: 'Configure MIG to use new template'
+        run: |
+          gcloud compute instance-groups managed set-instance-template \
+           ${{ env.MYMIG_NAME }} \
+            --template=projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.MY_REGION }}/instanceTemplates/${{ env.TNAME }} \
+            --region=${{ env.MY_REGION }}
+        env:
+            MY_REGION: ${{ secrets.REGION }}  
+            MYMIG_NAME: ${{ secrets.MIG_NAME }}  
 
+      - name: 'Start rolling update'
+        run: |
+          gcloud compute instance-groups managed rolling-action start-update ${{ env.MYMIG_NAME }} \
+            --version=template=projects/${{ env.GCLOUD_PROJECT }}/regions/${{ env.MY_REGION }}/instanceTemplates/${{ env.TNAME }} \
+            --region=${{ env.MY_REGION }} \
+            --type=proactive
+        env:
+            MY_REGION: ${{ secrets.REGION }}  
+            MYMIG_NAME: ${{ secrets.MIG_NAME }}  
+
+      - name: 'Check rolling update'
+        run: |
+          gcloud compute instance-groups managed wait-until ${{ env.MYMIG_NAME }} \
+          --version-target-reached \
+            --region=${{ env.MY_REGION }}
+        env:
+            MY_REGION: ${{ secrets.REGION }}  
+            MYMIG_NAME: ${{ secrets.MIG_NAME }}  
