@@ -90,12 +90,42 @@ jobs:
         run: |          
           MY_MI=$(jq -r '.builds[0].artifact_id' image_manifest.json)
           echo "MY_MI=$MY_MI" >> $GITHUB_ENV
-          echo $MY_MI
 
       - name: 'Generate Template Name with Timestamp'
         id: generate-timestamp
         run: |
-          echo "T_NAME=csye6225-vm-$(date +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
-          echo $T_NAME
+          echo "TNAME=csye6225-vm-$(date +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
+      
+      - name: 'Create an Instance Template'
+        run: |
+          gcloud compute instance-templates create $TNAME \
+            --boot-disk-kms-key projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key \
+            --machine-type=${{ env.MYMACHINE_TYPE }} \
+            --tags=${{ env.MYTAGS }} \
+            --image=${{ env.MY_MI }} \
+            --region=${{ env.MY_REGION }} \
+            --instance-template-region=${{ env.MY_REGION }} \
+            --boot-disk-size=${{ env.MYBOOT_DISK_SIZE }} \
+            --boot-disk-type=${{ env.MYBOOT_DISK_TYPE }} \
+            --network-interface="network=${{ env.MYNETWORK }},subnet=${{ env.MYSUBNET }},network-tier=${{ env.MYNETWORK_TIER }}" \
+            --service-account=${{ env.MYSA }} \
+            --scopes=${{ env.MYSCOPES }} \
+            --metadata=startup-script=$'#!/bin/bash\n# Check if SQL_URI key exists in the .env file\nif grep -q "^SQL_URI=" "/home/csye6225/webapp/.env"; then\n    echo "SQL_URI key already exists in the .env file."\nelse\n    echo "Adding SQL_URI to the .env file."\n    echo "SQL_URI=mysql://${{ env.MYPROD_DB_USER }}:${{ env.MYPROD_DB_PASSWORD }}@${{ env.MYPROD_DB_HOST }}:${{ env.MYPROD_DB_PORT }}/" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    echo "DATABASE=${{ env.MYPROD_DB_NAME }}" | sudo tee -a "/home/csye6225/webapp/.env" > /dev/null\n    # Only create the .env_ready file if SQL_URI is added\n    touch "/tmp/.env_ready"\n    echo ".env_ready file created in /tmp."\nfi'
+        env:
+              MYMACHINE_TYPE: ${{ secrets.MACHINE_TYPE }}
+              MYTAGS: ${{ secrets.TAGS }}
+              MYBOOT_DISK_SIZE: ${{ secrets.BOOT_DISK_SIZE }}
+              MYBOOT_DISK_TYPE: ${{ secrets.BOOT_DISK_TYPE }}
+              MYNETWORK: ${{ secrets.NETWORK }}
+              MYSUBNET: ${{ secrets.SUBNET }}
+              MYNETWORK_TIER: ${{ secrets.NETWORK_TIER }}
+              MYSA: ${{ secrets.SERVICE_ACCOUNT }}
+              MYSCOPES: ${{ secrets.SCOPES }}
+              MYPROD_DB_USER: ${{ secrets.PROD_DB_USER }}
+              MYPROD_DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+              MYPROD_DB_HOST: ${{ secrets.PROD_DB_HOST }}
+              MYPROD_DB_PORT: ${{ secrets.PROD_DB_PORT }}
+              MYPROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
+              MY_REGION: ${{ secrets.REGION }}  
 
 
