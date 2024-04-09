@@ -99,7 +99,7 @@ jobs:
       - name: 'Create an Instance Template'
         run: |
           gcloud compute instance-templates create $TNAME \
-            --boot-disk-kms-key projects/cloud-assigment-4/locations/us-east1/keyRings/my-key-ring/cryptoKeys/vm-crypto-key \
+            --boot-disk-kms-key projects/${{ env.GCLOUD_PROJECT }}/locations/${{ env.MY_REGION }}/keyRings/${{ env.MY_RING }}/cryptoKeys/${{ env.MY_KEY }} \
             --machine-type=${{ env.MYMACHINE_TYPE }} \
             --tags=${{ env.MYTAGS }} \
             --image=${{ env.MY_MI }} \
@@ -126,7 +126,10 @@ jobs:
               MYPROD_DB_HOST: ${{ secrets.PROD_DB_HOST }}
               MYPROD_DB_PORT: ${{ secrets.PROD_DB_PORT }}
               MYPROD_DB_NAME: ${{ secrets.PROD_DB_NAME }}
-              MY_REGION: ${{ secrets.REGION }}  
+              MY_REGION: ${{ secrets.REGION }} 
+              MY_RING: ${{ secrets.RING }}
+              MY_KEY: ${{ secrets.KEY }}
+
 
       - name: 'Configure MIG to use new template'
         run: |
