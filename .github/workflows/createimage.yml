@@ -86,7 +86,16 @@ jobs:
       - name: Building the Image
         run: packer build -var 'project_id=${{ secrets.PROJECT_ID }}' -var 'zone=${{ secrets.ZONE }}' ./packerconfig/main.pkr.hcl      
 
-      - name: View Image Info
+      - name: Fetch the Image Name
+        run: |          
+          MY_MI=$(jq -r '.builds[0].artifact_id' image_manifest.json)
+          echo "MY_MI=$MY_MI" >> $GITHUB_ENV
+          echo $MY_MI
+
+      - name: 'Generate Template Name with Timestamp'
+        id: generate-timestamp
         run: |
-          cat image_manifest.json
-          echo "::set-output name=artifact_id::$(jq -r '.builds[0].artifact_id' image_manifest.json)"
+          echo "T_NAME=csye6225-vm-$(date +%Y-%m-%d-%H-%M-%S)" >> $GITHUB_ENV
+          echo $T_NAME
+
+
