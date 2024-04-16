@@ -21,7 +21,7 @@ describe("User Tests", () => {
         };
     
         const createRes = await request(app)
-                .post("/v1/user")
+                .post("/v2/user")
                 .send(payload)
     
         expect(createRes.statusCode).toBe(httpStatus.CREATED);
@@ -29,10 +29,10 @@ describe("User Tests", () => {
         await MailTracking.create({email: payload.username, mail_sent: new moment()});
 
         await request(app)
-                .get(`/v1/user/randomLast@example.com/${createRes.body.verification_token}/verification`)
+                .get(`/v2/user/randomLast@example.com/${createRes.body.verification_token}/verification`)
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));        
         const getRes = await request(app)
-                .get("/v1/user/self")
+                .get("/v2/user/self")
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
     
         expect(getRes.statusCode).toBe(httpStatus.OK);
@@ -47,14 +47,14 @@ describe("User Tests", () => {
             };
     
             const updateRes = await request(app)
-                .put("/v1/user/self")
+                .put("/v2/user/self")
                 .send(payload)
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
     
             expect(updateRes.statusCode).toBe(httpStatus.NO_CONTENT);
     
             const getRes = await request(app)
-                .get("/v1/user/self")
+                .get("/v2/user/self")
                 .set('Authorization', 'Basic ' + Buffer.from('randomLast@example.com:test').toString('base64'));
     
             expect(getRes.statusCode).toBe(httpStatus.OK);
